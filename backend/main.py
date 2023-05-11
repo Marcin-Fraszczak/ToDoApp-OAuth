@@ -2,10 +2,16 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+import docs
 from apps.users.users import users
 from apps.todos.todos import todos
 
-app = FastAPI()
+app = FastAPI(
+	title="ToDoApp - OAuth",
+	description=docs.description,
+	contact=docs.contact,
+	openapi_tags=docs.tags_metadata,
+)
 
 app.include_router(users)
 app.include_router(todos)

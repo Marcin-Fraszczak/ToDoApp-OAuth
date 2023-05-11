@@ -2,14 +2,14 @@ from os import getenv
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from fastapi import Depends, Request
-from typing import Annotated
+from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
+from typing import Annotated
 from pymongo.errors import OperationFailure, ServerSelectionTimeoutError
 from pydantic import EmailStr
 
+from .models import BaseUser, UserInDB
 from ..common import HTTP_exceptions as exc
-from ..common.models import BaseUser, UserInDB
 from ..common.db import users_db
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -98,12 +98,3 @@ def delete_refresh_token(username: EmailStr):
 		return updated.modified_count
 	except (OperationFailure, ServerSelectionTimeoutError):
 		raise exc.database_error
-
-
-def get_user_from_header(request: Request):
-	try:
-		token_string = request.headers.get('Authorization')
-		access_token = token_string.split()[1]
-		return get_current_user(access_token)
-	except AttributeError:
-		raise exc.invalid_credentials

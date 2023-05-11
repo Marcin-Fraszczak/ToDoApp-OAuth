@@ -3,8 +3,8 @@ from typing import Annotated
 from fastapi import Depends, APIRouter, Response, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
-from . import functions_users as uf
-from ..common.models import User, Token
+from . import helpers as uf
+from .models import User, Token
 from ..common.db import users_db
 from ..common import HTTP_exceptions as exc
 
@@ -35,6 +35,7 @@ async def login_for_access_token(*, response: Response,
 
 	users_db.update_one({"username": user.username}, {"$set": {"refresh_token": refresh_token}})
 	response.set_cookie(key="refresh_token", value=refresh_token, httponly=True)
+	# TODO: uncomment this line when working with React frontend
 	# response.set_cookie(key="refresh_token", value=refresh_token, httponly=True, secure=True, samesite='none')
 
 	return {"access_token": access_token, "token_type": "bearer"}
@@ -43,6 +44,8 @@ async def login_for_access_token(*, response: Response,
 @users.get("/token/refresh", response_model=Token)
 async def refresh_access_token(request: Request):
 	refresh_token = request.cookies.get("refresh_token")
+	if not refresh_token:
+		raise exc.invalid_credentials
 	user = await uf.get_current_user(refresh_token)
 	if user.username:
 		access_token = uf.create_token(user.username, expires_delta=int(ACCESS_TOKEN_EXPIRES))
@@ -54,6 +57,8 @@ async def refresh_access_token(request: Request):
 @users.get("/logout")
 async def logout_user(*, response: Response, request: Request):
 	refresh_token = request.cookies.get("refresh_token")
+	if not refresh_token:
+		raise exc.invalid_credentials
 	user = await uf.get_current_user(refresh_token)
 
 	if user.username:
