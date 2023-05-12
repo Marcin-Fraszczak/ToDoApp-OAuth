@@ -22,6 +22,7 @@ const UsernameInput = (props) => {
           placeholder="email..."
           ref={props.usernameRef}
           required
+          style={{backgroundColor: "#D1E2DB"}}
         />
         <TooltipElement type='email'/>
       </div>

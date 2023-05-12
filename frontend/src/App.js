@@ -7,6 +7,7 @@ import RequireAuth from "./components/RequireAuth"
 import Missing from "./components/Missing"
 import AuthForm from "./components/AuthForm"
 import Home from "./components/Home"
+import BackGround from "./components/BackGround"
 
 const App = () => {
 
@@ -15,6 +16,7 @@ const App = () => {
       <Route path="/" element={<Layout/>}>
         {/* public routes */}
         <Route path="auth" element={<AuthForm/>}/>
+        <Route path="back" element={<BackGround/>}/>
 
         {/* we want to protect these routes */}
         <Route element={<PersistLogin/>}>

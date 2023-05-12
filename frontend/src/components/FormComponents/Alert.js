@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
 import Alert from 'react-bootstrap/Alert'
-import FormBody from "./FormBody"
 
 const AlertElement = (props) => {
   const [show, setShow] = useState(props.showAlert)

@@ -1,13 +1,15 @@
 const FormBody = (props) => {
   const pageStyle = {
-    backgroundColor: "#508bfc"
+    backgroundColor: "grey"
   }
   const cardStyle = {
     borderRadius: "1.5rem",
+    opacity: "0.9",
+    backgroundColor: "#375e5f"
   }
 
   return (
-    <section className="vh-100" style={pageStyle}>
+    <section className="vh-100" /*style={pageStyle}*/>
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-12 col-md-9 col-lg-6 col-xl-5">

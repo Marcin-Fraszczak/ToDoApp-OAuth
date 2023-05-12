@@ -1,9 +1,9 @@
 const Divider = () => {
-  const lineStyle = {flex: 1, height: '1px', backgroundColor: 'grey'}
+  const lineStyle = {flex: 1, height: '1px', backgroundColor: 'lightgrey'}
   const textStyle = {width: '3rem', textAlign: 'center'}
 
   return (
-    <div className="d-flex align-items-baseline mt-3 mb-1">
+    <div className="d-flex align-items-baseline mt-3 mb-1 text-white-50">
       <div style={lineStyle}/>
 
       <div>

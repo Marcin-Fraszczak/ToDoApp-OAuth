@@ -28,7 +28,7 @@ const TooltipElement = ({type}) => {
       delay={{show: 250, hide: 400}}
       overlay={renderTooltip}
     >
-      <span className="input-group-text">
+      <span className="input-group-text" style={{backgroundColor: "#909C97"}}>
         <FontAwesomeIcon icon={faCircleQuestion}/>
       </span>
     </OverlayTrigger>

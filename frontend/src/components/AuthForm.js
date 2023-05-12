@@ -4,8 +4,10 @@ import {faGoogle} from "@fortawesome/free-brands-svg-icons"
 import axios, {handleAxiosErrors} from "../api/axios"
 import isEmail from "validator/es/lib/isEmail"
 import isStrongPassword from "validator/es/lib/isStrongPassword"
+
+import BackGround from "./BackGround"
 import FormBody from "./FormComponents/FormBody"
-import TopButtons, {login, register} from "./FormComponents/TopButtons"
+import TopButtons, {login} from "./FormComponents/TopButtons"
 import UsernameInput from "./FormComponents/UsernameInput"
 import PasswordInput from "./FormComponents/PaswordInput"
 import CheckBox from "./FormComponents/Checkbox"
@@ -86,39 +88,40 @@ const AuthForm = () => {
   const wideButtonClass = (type) => `btn btn-${type} btn-lg w-100 shadow mt-1`
 
   return (
-    <FormBody opaque={errMsg.length > 0}>
-      <TopButtons formType={formType} setFormType={setFormType}/>
+    <BackGround>
+      <FormBody opaque={errMsg.length > 0}>
+        <TopButtons formType={formType} setFormType={setFormType}/>
 
-      <form onSubmit={handleSubmit} noValidate={true}>
-        <UsernameInput
-          username={username}
-          setUsername={setUsername}
-          isValidUsername={isValidUsername}
-          usernameRef={usernameRef}
-        />
-        <PasswordInput
-          password={password}
-          setPassword={setPassword}
-          isValidPassword={isValidPassword}
-        />
-        <CheckBox/>
-        <button
-          className={wideButtonClass("primary")}
-          type="submit"
-          disabled={!isValidPassword || !isValidUsername}
-        >{formType}</button>
-      </form>
+        <form onSubmit={handleSubmit} noValidate={true}>
+          <UsernameInput
+            username={username}
+            setUsername={setUsername}
+            isValidUsername={isValidUsername}
+            usernameRef={usernameRef}
+          />
+          <PasswordInput
+            password={password}
+            setPassword={setPassword}
+            isValidPassword={isValidPassword}
+          />
+          <CheckBox/>
+          <button
+            className={wideButtonClass("dark")}
+            type="submit"
+            disabled={!isValidPassword || !isValidUsername}
+          >{formType}</button>
+        </form>
 
-      <Divider/>
+        <Divider/>
 
-      <button className={wideButtonClass("danger")}>
-        <FontAwesomeIcon icon={faGoogle} className="me-3" size="xl"/>
-        Sign in with google
-      </button>
-      <br/>
+        <button className={wideButtonClass("dark")} style={{opacity: "0.8"}}>
+          <FontAwesomeIcon icon={faGoogle} className="me-3" size="xl"/>
+          Continue with google
+        </button>
 
-      <AlertElement showAlert={errMsg.length > 0} text={errMsg} setErrMsg={setErrMsg}/>
-    </FormBody>
+        <AlertElement showAlert={errMsg.length > 0} text={errMsg} setErrMsg={setErrMsg}/>
+      </FormBody>
+    </BackGround>
   )
 }
 

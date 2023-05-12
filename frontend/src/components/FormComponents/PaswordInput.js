@@ -21,6 +21,7 @@ const PasswordInput = (props) => {
           }
           placeholder="password..."
           required
+          style={{backgroundColor: "#D1E2DB"}}
         />
         <TooltipElement type='password'/>
       </div>

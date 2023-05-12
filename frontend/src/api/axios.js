@@ -19,6 +19,6 @@ export const handleAxiosErrors = (err, setErrMsg) => {
     } else if (err.response?.status === 401) {
       setErrMsg(`Unauthorized: ${err?.detail?.msg}`)
     } else {
-      setErrMsg(`Login Failed: ${err?.detail?.msg}`)
+      setErrMsg(`Action Failed: ${err?.detail?.msg}`)
     }
   }
