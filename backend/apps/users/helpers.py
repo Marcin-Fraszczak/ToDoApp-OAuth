@@ -2,7 +2,7 @@ from os import getenv
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from fastapi import Depends
+from fastapi import Depends, Request
 from fastapi.security import OAuth2PasswordBearer
 from typing import Annotated
 from pymongo.errors import OperationFailure, ServerSelectionTimeoutError
@@ -64,6 +64,16 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 	if user is None:
 		raise exc.invalid_credentials
 	return user
+
+
+# async def get_current_user_from_header(request: Request):
+# 	access_token_string = request.headers.get("Authorization")
+# 	if not access_token_string:
+# 		raise exc.invalid_credentials
+# 	access_token = access_token_string.split()[1]
+# 	if not access_token:
+# 		raise exc.invalid_credentials
+# 	return await get_current_user(access_token)
 
 
 async def get_current_active_user(

@@ -57,12 +57,11 @@ async def refresh_access_token(request: Request):
 @users.get("/logout")
 async def logout_user(*, response: Response, request: Request):
 	refresh_token = request.cookies.get("refresh_token")
-	if not refresh_token:
-		raise exc.invalid_credentials
-	user = await uf.get_current_user(refresh_token)
-
-	if user.username:
+	if refresh_token:
 		response.delete_cookie("refresh_token")
-		if uf.delete_refresh_token(user.username):
-			return {"Successfully logged out"}
-	raise exc.invalid_credentials
+		user = await uf.get_current_user(refresh_token)
+		if user.username:
+			response.delete_cookie("refresh_token")
+			uf.delete_refresh_token(user.username)
+
+	return {"logged out"}

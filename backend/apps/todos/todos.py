@@ -1,5 +1,5 @@
 from datetime import datetime
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from fastapi.security import OAuth2PasswordBearer
 from bson.objectid import ObjectId
 from typing import Annotated
@@ -47,8 +47,14 @@ def validate_id(task_id: str) -> ObjectId:
 
 
 @todos.get("/")
-async def get_all_tasks(user: Annotated[UserInDB, Depends(uf.get_current_user)]) -> list[TaskInDB]:
+async def get_all_tasks(*, user: Annotated[UserInDB, Depends(uf.get_current_user)]) -> list[TaskInDB]:
 	return list_tasks(tasks_db, user.username)
+
+
+# @todos.get("/")
+# async def get_all_tasks(request: Request) -> list[TaskInDB]:
+# 	user = await uf.get_current_user_from_header(request)
+# 	return list_tasks(tasks_db, user.username)
 
 
 @todos.post("/")
@@ -80,9 +86,12 @@ async def modify_task(*, task_id: Annotated[str, Depends(validate_id)],
 async def delete_task(*, user: Annotated[UserInDB, Depends(uf.get_current_user)],
 					  task_id: Annotated[str, Depends(validate_id)]) -> dict[str, str]:
 	try:
-		deleted_operations = operations_db.delete_many({"owner": user.username, "task_id": str(task_id)})
-		deleted = tasks_db.delete_one({"owner": user.username, "_id": task_id})
-		return {"id": str(task_id), "deleted_operations": deleted_operations.deleted_count}
+		to_delete = tasks_db.find_one({"owner": user.username, "_id": task_id})
+		if to_delete:
+			deleted_operations = operations_db.delete_many({"owner": user.username, "task_id": str(task_id)})
+			deleted = tasks_db.delete_one({"owner": user.username, "_id": task_id})
+			return {"id": str(task_id), "deleted_operations": deleted_operations.deleted_count}
+		raise exc.not_found
 	except (OperationFailure, ServerSelectionTimeoutError):
 		raise exc.database_error
 
