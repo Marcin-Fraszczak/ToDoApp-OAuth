@@ -13,11 +13,19 @@ const TooltipElement = ({type}) => {
       "Password should have:", "at least 8 characters,",
       "at least one capital letter,", "at least one small letter,",
       "at least one digit,", "at least one special sign."
+    ],
+    "title": [
+      "At least:",
+      "3 characters long"
+    ],
+    "description": [
+      "This one is",
+      "totally optional"
     ]
   }
 
   const renderTooltip = (props) => (
-    <Tooltip id="button-tooltip" dataHtml={true} {...props}>
+    <Tooltip id="button-tooltip" /*dataHtml={true}*/ {...props}>
       {helpMsg[type].map((line, ind) => <p key={ind}>{line}</p>)}
     </Tooltip>
   )

@@ -1,18 +1,20 @@
 import React, {useState, useEffect, useRef} from "react"
+import {useLocation, useNavigate} from "react-router-dom"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faGoogle} from "@fortawesome/free-brands-svg-icons"
-import axios, {handleAxiosErrors} from "../api/axios"
+import axios, {handleAxiosErrors, axiosJson} from "../api/axios"
 import isEmail from "validator/es/lib/isEmail"
 import isStrongPassword from "validator/es/lib/isStrongPassword"
+import useAuth from "../hooks/useAuth"
 
-import BackGround from "./BackGround"
-import FormBody from "./FormComponents/FormBody"
-import TopButtons, {login} from "./FormComponents/TopButtons"
-import UsernameInput from "./FormComponents/UsernameInput"
-import PasswordInput from "./FormComponents/PaswordInput"
-import CheckBox from "./FormComponents/Checkbox"
-import Divider from "./FormComponents/Divider"
-import AlertElement from "./FormComponents/Alert"
+import FormBody from "./AuthFormPartials/FormBody"
+import TopButtons, {login} from "./AuthFormPartials/TopButtons"
+import UsernameInput from "./AuthFormPartials/UsernameInput"
+import PasswordInput from "./AuthFormPartials/PaswordInput"
+import CheckBox from "./AuthFormPartials/Checkbox"
+import Divider from "./AuthFormPartials/Divider"
+import AlertElement from "./AuthFormPartials/Alert"
+
 
 const AuthForm = () => {
   const [formType, setFormType] = useState(login)
@@ -21,7 +23,12 @@ const AuthForm = () => {
   const [password, setPassword] = useState("")
   const [isValidPassword, setIsValidPassword] = useState(false)
   const [errMsg, setErrMsg] = useState("")
+
   const usernameRef = useRef()
+  const {setAuth, persist, setPersist} = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from?.pathname || "/"
 
   useEffect(() => {
     usernameRef.current.focus()
@@ -42,6 +49,10 @@ const AuthForm = () => {
     setErrMsg("")
   }, [formType])
 
+  useEffect(() => {
+    localStorage.setItem("persist", persist)
+  }, [persist])
+
   const resetForm = () => {
     setUsername("")
     setPassword("")
@@ -53,8 +64,8 @@ const AuthForm = () => {
 
   const registerUser = async (data) => {
     try {
-      const response = await axios.post("/users/", JSON.stringify(data), {withCredentials: true})
-      console.log(response?.data)
+      const response = await axiosJson.post("/users", JSON.stringify(data))
+      response.status === 200 && await loginUser(data)
     } catch (err) {
       handleAxiosErrors(err, setErrMsg)
     }
@@ -66,7 +77,12 @@ const AuthForm = () => {
       userForm.append("username", data.username)
       userForm.append("password", data.password)
       const response = await axios.post("/users/token", userForm, {withCredentials: true})
-      console.log(response?.data)
+      if (response.status === 200) {
+        setAuth({username: data.username, accessToken: response?.data?.access_token})
+        navigate(from, {replace: true})
+      } else {
+        setErrMsg("Error while logging in")
+      }
     } catch (err) {
       handleAxiosErrors(err, setErrMsg)
     }
@@ -80,48 +96,44 @@ const AuthForm = () => {
       formType === login
         ? loginUser(data)
         : registerUser(data)
-    } else {
-      setErrMsg("Invalid input")
-    }
+    } else setErrMsg("Invalid input")
   }
 
   const wideButtonClass = (type) => `btn btn-${type} btn-lg w-100 shadow mt-1`
 
   return (
-    <BackGround>
-      <FormBody opaque={errMsg.length > 0}>
-        <TopButtons formType={formType} setFormType={setFormType}/>
+    <FormBody>
+      <TopButtons formType={formType} setFormType={setFormType}/>
 
-        <form onSubmit={handleSubmit} noValidate={true}>
-          <UsernameInput
-            username={username}
-            setUsername={setUsername}
-            isValidUsername={isValidUsername}
-            usernameRef={usernameRef}
-          />
-          <PasswordInput
-            password={password}
-            setPassword={setPassword}
-            isValidPassword={isValidPassword}
-          />
-          <CheckBox/>
-          <button
-            className={wideButtonClass("dark")}
-            type="submit"
-            disabled={!isValidPassword || !isValidUsername}
-          >{formType}</button>
-        </form>
+      <form onSubmit={handleSubmit} noValidate={true}>
+        <UsernameInput
+          username={username}
+          setUsername={setUsername}
+          isValidUsername={isValidUsername}
+          usernameRef={usernameRef}
+        />
+        <PasswordInput
+          password={password}
+          setPassword={setPassword}
+          isValidPassword={isValidPassword}
+        />
+        <CheckBox persist={persist} setPersist={setPersist}/>
+        <button
+          className={wideButtonClass("dark")}
+          type="submit"
+          disabled={!isValidPassword || !isValidUsername}
+        >{formType}</button>
+      </form>
 
-        <Divider/>
+      <Divider/>
 
-        <button className={wideButtonClass("dark")} style={{opacity: "0.8"}}>
-          <FontAwesomeIcon icon={faGoogle} className="me-3" size="xl"/>
-          Continue with google
-        </button>
+      <button className={wideButtonClass("dark")} style={{opacity: "0.8"}}>
+        <FontAwesomeIcon icon={faGoogle} className="me-3" size="xl"/>
+        Continue with google
+      </button>
 
-        <AlertElement showAlert={errMsg.length > 0} text={errMsg} setErrMsg={setErrMsg}/>
-      </FormBody>
-    </BackGround>
+      <AlertElement showAlert={errMsg.length > 0} text={errMsg} setErrMsg={setErrMsg}/>
+    </FormBody>
   )
 }
 

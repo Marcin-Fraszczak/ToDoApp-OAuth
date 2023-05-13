@@ -1,5 +1,3 @@
-import '../background.css'
-
 const BackGround = (props) => {
 
   return (

@@ -20,11 +20,9 @@ const useRefreshToken = () => {
       withCredentials: true
     })
     setAuth(prev => {
-      // console.log(JSON.stringify(prev))
-      console.log("from use refresh", response.data.access_token)
-      console.log(parseJwt(response.data.access_token))
       return {
         ...prev,
+        username: parseJwt(response.data.access_token)?.sub,
         accessToken: response.data.access_token
       }
     })
