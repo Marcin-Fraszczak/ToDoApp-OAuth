@@ -51,12 +51,6 @@ async def get_all_tasks(*, user: Annotated[UserInDB, Depends(uf.get_current_user
 	return list_tasks(tasks_db, user.username)
 
 
-# @todos.get("/")
-# async def get_all_tasks(request: Request) -> list[TaskInDB]:
-# 	user = await uf.get_current_user_from_header(request)
-# 	return list_tasks(tasks_db, user.username)
-
-
 @todos.post("/")
 async def add_new_task(*, user: Annotated[UserInDB, Depends(uf.get_current_user)], task: BaseTask) -> TaskInDB:
 	try:
@@ -133,7 +127,7 @@ async def modify_operation(*, user: Annotated[UserInDB, Depends(uf.get_current_u
 @todos.delete("/{task_id}/{oper_id}")
 async def delete_operation(*, user: Annotated[UserInDB, Depends(uf.get_current_user)],
 						   task_id: Annotated[str, Depends(validate_id)],
-						   oper_id: str,) -> dict[str, str]:
+						   oper_id: str, ) -> dict[str, str]:
 	oper_id = validate_id(oper_id)
 	try:
 		deleted = operations_db.delete_one({"owner": user.username, "_id": oper_id, "task_id": str(task_id)})

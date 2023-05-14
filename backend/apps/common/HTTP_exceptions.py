@@ -6,6 +6,11 @@ invalid_credentials = HTTPException(
 	headers={"WWW-Authenticate": "Bearer"},
 )
 
+invalid_email = HTTPException(
+	status_code=status.HTTP_401_UNAUTHORIZED,
+	detail={"msg": "Invalid email address"},
+)
+
 already_exists = HTTPException(
 	status_code=status.HTTP_403_FORBIDDEN,
 	detail={"msg": "User already exists"},
