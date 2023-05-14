@@ -8,6 +8,52 @@ body {
     background-size: cover;
 }
 
+
+/*custom checkbox*/
+.chkbx input[type=checkbox] {
+    display: none;
+}
+
+.chkbx {
+    position: relative;
+    cursor: pointer;
+}
+
+.chkbx .x {
+    display: block;
+    opacity: 0.8;
+    width: 45px;
+    height: 20px;
+    border: 2px solid #B8BDB7;
+    border-radius: 60px;
+    transition: 0.5s;
+}
+
+.chkbx .x:before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 2px;
+    left: 1px;
+    box-sizing: border-box;
+    background: #B8BDB7;
+    border: 2px solid #B8BDB7;
+    border-radius: 40px;
+    transition: 0.5s;
+}
+
+.chkbx :checked ~ .x:before {
+    background: #ffffff;
+    border-color: #ffffff;
+    opacity: 1;
+    transform: translatex(27px);
+}
+
+.chkbx :checked ~ .x {
+    border-color: #ffffff;
+}
+
 .firefly {
     position: fixed;
     left: 50%;

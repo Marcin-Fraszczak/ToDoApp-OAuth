@@ -22,16 +22,21 @@ const Navigation = () => {
     opacity: "0.97",
   }
 
+  const buttonVariant = "outline-light mx-1"
+
   return (
     <Navbar collapseOnSelect expand="md" bg="dark" variant="dark" sticky="top" style={navbarStyle}>
-      <Container>
+      <Container className="w-75">
         <Navbar.Brand href="/">ToDoApp</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
         <Navbar.Collapse id="responsive-navbar-nav" className=" justify-content-around">
-          <Button variant="outline-light" onClick={refresh}>Refresh</Button>
+
+          <Button variant={buttonVariant} onClick={refresh}>Refresh</Button>
+          <Button variant={buttonVariant} onClick={() => navigate("/chill")}>Chill</Button>
           <span className="text-white-50 mx-4">{auth.username}</span>
           <Timer/>
-          <Button variant="outline-light" onClick={logoutUser}>Log out</Button>
+          <Button variant={buttonVariant} onClick={logoutUser}>Log out</Button>
+
         </Navbar.Collapse>
       </Container>
     </Navbar>

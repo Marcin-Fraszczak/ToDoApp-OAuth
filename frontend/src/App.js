@@ -7,7 +7,8 @@ import RequireAuth from "./components/RequireAuth"
 import Missing from "./components/Missing"
 import AuthForm from "./components/AuthForm/AuthForm"
 import Home from "./components/Home/Home"
-import BackGround from "./components/Partials/BackGround"
+import Spinner from "./components/Spinner"
+import ChillOut from "./components/ChillOut"
 
 const App = () => {
 
@@ -17,7 +18,8 @@ const App = () => {
 
           {/* public routes */}
           <Route path="auth" element={<AuthForm/>}/>
-          <Route path="back" element={<BackGround/>}/>
+          <Route path="chill" element={<ChillOut/>}/>
+          <Route path="spin" element={<Spinner/>}/>
 
           {/* protected routes */}
           <Route element={<PersistLogin/>}>

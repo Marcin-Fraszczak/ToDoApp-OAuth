@@ -1,14 +1,18 @@
 import {Link} from "react-router-dom"
+import FormBody from "./AuthForm/AuthFormPartials/FormBody"
 
 const Missing = () => {
+  const buttonGroupStyle = "mt-4 d-flex justify-content-around"
+  const buttonStyle = "btn btn-outline-light"
+
   return (
-    <article style={{padding: "100px"}}>
-      <h1>Oops!</h1>
-      <p>Page Not Found</p>
-      <div className="flexGrow">
-        <Link to="/">Visit Our Homepage</Link>
+    <FormBody>
+      <img src="/404.jpg" alt="404 Not Found" style={{width: "100%"}}/>
+      <div className={buttonGroupStyle}>
+        <Link to="/" className={buttonStyle}>Homepage</Link>
+        <Link to="/chill" className={buttonStyle}>Just Chill</Link>
       </div>
-    </article>
+    </FormBody>
   )
 }
 

@@ -2,6 +2,7 @@ import {Outlet} from "react-router-dom"
 import {useState, useEffect} from "react"
 import useRefreshToken from '../hooks/useRefreshToken'
 import useAuth from '../hooks/useAuth'
+import Spinner from "./Spinner"
 
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -15,7 +16,7 @@ const PersistLogin = () => {
       try {
         await refresh()
       } catch (err) {
-        console.error("refresh error", err)
+        // console.error("refresh error", err)
       } finally {
         isMounted && setIsLoading(false)
       }
@@ -31,7 +32,7 @@ const PersistLogin = () => {
       {!persist
         ? <Outlet/>
         : isLoading
-          ? <p>Loading...</p>
+          ? <Spinner/>
           : <Outlet/>
       }
     </>
