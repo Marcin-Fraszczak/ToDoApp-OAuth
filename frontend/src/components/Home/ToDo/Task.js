@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faArchive, faBoxOpen, faMinusCircle, faPlusCircle, faTrash} from "@fortawesome/free-solid-svg-icons"
-import {handleAxiosErrors} from "../../api/axios"
-import useAxiosPrivate from "../../hooks/useAxiosPrivate"
+import {handleAxiosErrors} from "../../../api/axios"
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 
 import CardBody from "./ToDoPartials/CardBody"
-import AlertElement from "../AuthFormPartials/Alert"
+import AlertElement from "../../Partials/Alert"
 import Operations from "./Operations"
 import Operation from "./Operation"
 

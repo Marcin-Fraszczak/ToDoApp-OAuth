@@ -1,11 +1,10 @@
 import React, {useEffect, useRef, useState} from "react"
-import {handleAxiosErrors} from "../../api/axios"
-import useAxiosPrivate from "../../hooks/useAxiosPrivate"
+import {handleAxiosErrors} from "../../../api/axios"
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
+import useTextValidator from "../../../hooks/useTextValidator"
 
 import TitleInput from "./ToDoPartials/TitleInput"
-import AlertElement from "../AuthFormPartials/Alert"
-
-const textValidator = (text, length) => text && (typeof text === 'string') && text.length >= length
+import AlertElement from "../../Partials/Alert"
 
 const Operations = (props) => {
   const [title, setTitle] = useState('')
@@ -13,6 +12,7 @@ const Operations = (props) => {
   const [errMsg, setErrMsg] = useState("")
   const titleRef = useRef()
   const axiosPrivate = useAxiosPrivate()
+  const textValidator = useTextValidator()
 
   useEffect(() => {
     setIsValidTitle(textValidator(title, 3))

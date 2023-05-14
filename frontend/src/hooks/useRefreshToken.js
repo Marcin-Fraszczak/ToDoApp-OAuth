@@ -1,19 +1,10 @@
 import axios from '../api/axios'
 import useAuth from './useAuth'
-
-const parseJwt = (token) => {
-  const base64Url = token.split('.')[1]
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-  const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
-    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-  }).join(''))
-
-  return JSON.parse(jsonPayload)
-}
-
+import useDecodeToken from "./useDecodeToken"
 
 const useRefreshToken = () => {
   const {setAuth} = useAuth()
+  const decodeToken = useDecodeToken()
 
   const refresh = async () => {
     const response = await axios.get('users/token/refresh', {
@@ -22,7 +13,7 @@ const useRefreshToken = () => {
     setAuth(prev => {
       return {
         ...prev,
-        username: parseJwt(response.data.access_token)?.sub,
+        username: decodeToken(response.data.access_token)?.sub,
         accessToken: response.data.access_token
       }
     })

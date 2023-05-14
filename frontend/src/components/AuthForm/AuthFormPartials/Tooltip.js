@@ -25,7 +25,7 @@ const TooltipElement = ({type}) => {
   }
 
   const renderTooltip = (props) => (
-    <Tooltip id="button-tooltip" /*dataHtml={true}*/ {...props}>
+    <Tooltip id="button-tooltip" {...props}>
       {helpMsg[type].map((line, ind) => <p key={ind}>{line}</p>)}
     </Tooltip>
   )

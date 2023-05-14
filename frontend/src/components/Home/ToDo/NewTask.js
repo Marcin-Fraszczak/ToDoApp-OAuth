@@ -1,15 +1,15 @@
 import React, {useState, useEffect, useRef} from "react"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faCirclePlus, faEraser} from "@fortawesome/free-solid-svg-icons"
-import {handleAxiosErrors} from "../../api/axios"
-import useAxiosPrivate from "../../hooks/useAxiosPrivate"
+import {handleAxiosErrors} from "../../../api/axios"
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
+import useTextValidator from "../../../hooks/useTextValidator"
 
 import CardBody from "./ToDoPartials/CardBody"
 import TitleInput from "./ToDoPartials/TitleInput"
 import DescriptionInput from "./ToDoPartials/DescriptionInput"
-import AlertElement from "../AuthFormPartials/Alert"
+import AlertElement from "../../Partials/Alert"
 
-const textValidator = (text, length) => text && (typeof text === 'string') && text.length >= length
 
 const NewTask = (props) => {
   const [title, setTitle] = useState("")
@@ -19,6 +19,7 @@ const NewTask = (props) => {
 
   const titleRef = useRef()
   const axiosPrivate = useAxiosPrivate()
+  const textValidator = useTextValidator()
 
   useEffect(() => {
     titleRef.current.focus()

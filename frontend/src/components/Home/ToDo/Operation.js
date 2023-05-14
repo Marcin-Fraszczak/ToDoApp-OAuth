@@ -1,12 +1,12 @@
 import React, {useEffect, useRef, useState} from "react"
 import isInt from "validator/es/lib/isInt"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faArchive, faBoxOpen, faClock, faTimes, faTrash} from "@fortawesome/free-solid-svg-icons"
-import {handleAxiosErrors} from "../../api/axios"
-import useAxiosPrivate from "../../hooks/useAxiosPrivate"
+import {faArchive, faBoxOpen, faClock, faTrash} from "@fortawesome/free-solid-svg-icons"
+import {handleAxiosErrors} from "../../../api/axios"
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 
 import NumberInput from "./ToDoPartials/NumberInput"
-import AlertElement from "../AuthFormPartials/Alert"
+import AlertElement from "../../Partials/Alert"
 
 const Operation = (props) => {
   const [showForm, setShowForm] = useState(false)

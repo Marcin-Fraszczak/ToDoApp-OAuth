@@ -4,7 +4,7 @@ import {AuthProvider} from "./context/AuthProvider"
 import {Routes, Route, BrowserRouter} from "react-router-dom"
 import {disableReactDevTools} from '@fvilers/disable-react-devtools'
 import App from './App'
-import BackGround from "./components/BackGround"
+import BackGround from "./components/Partials/BackGround"
 
 if (process.env.NODE_ENV === 'production') {
   disableReactDevTools()

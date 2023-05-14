@@ -1,21 +1,20 @@
 import React, {useEffect, useState} from "react"
-import {handleAxiosErrors} from "../api/axios"
+import {handleAxiosErrors} from "../../api/axios"
 import NewTask from "./ToDo/NewTask"
 import Task from "./ToDo/Task"
-import AlertElement from "./AuthFormPartials/Alert"
-import Navigation from "./Navigation"
-import useAuth from "../hooks/useAuth"
-import useAxiosPrivate from "../hooks/useAxiosPrivate"
+import AlertElement from "../Partials/Alert"
+import Navigation from "../Partials/Navigation"
+import useAxiosPrivate from "../../hooks/useAxiosPrivate"
 
 const Home = () => {
   const [tasks, setTasks] = useState([])
   const [errMsg, setErrMsg] = useState("")
-  const {auth, setAuth} = useAuth()
   const axiosPrivate = useAxiosPrivate()
 
   useEffect(() => {
     getTasks()
   }, [])
+
 
   const getTasks = async () => {
     try {
@@ -24,7 +23,6 @@ const Home = () => {
         setTasks(response.data)
       } else setErrMsg("Error while downloading tasks")
     } catch (err) {
-      console.log(err)
       handleAxiosErrors(err, setErrMsg)
     }
   }

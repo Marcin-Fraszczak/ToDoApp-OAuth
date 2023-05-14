@@ -1,5 +1,5 @@
 import React from "react"
-import TooltipElement from "../../AuthFormPartials/Tooltip"
+import TooltipElement from "../../../AuthForm/AuthFormPartials/Tooltip"
 
 const DescriptionInput = (props) => {
 

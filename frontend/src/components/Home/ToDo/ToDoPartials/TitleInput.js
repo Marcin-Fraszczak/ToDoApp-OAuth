@@ -1,5 +1,5 @@
 import React from "react"
-import TooltipElement from "../../AuthFormPartials/Tooltip"
+import TooltipElement from "../../../AuthForm/AuthFormPartials/Tooltip"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faCirclePlus} from "@fortawesome/free-solid-svg-icons"
 
