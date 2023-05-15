@@ -154,7 +154,7 @@ const Operation = (props) => {
         </div>
       }
 
-      <AlertElement showAlert={errMsg.length > 0} text={errMsg} setErrMsg={setErrMsg}/>
+      <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg}/>
 
     </li>
   )

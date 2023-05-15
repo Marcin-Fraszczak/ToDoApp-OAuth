@@ -1,13 +1,15 @@
 import React, {useState, useEffect, useRef} from "react"
-import {useLocation, useNavigate} from "react-router-dom"
 import isStrongPassword from "validator/es/lib/isStrongPassword"
+import {handleAxiosErrors} from "../../api/axios"
 import useAxiosPrivate from "../../hooks/useAxiosPrivate"
+import {useNavigate} from "react-router-dom"
 import useAuth from "../../hooks/useAuth"
 import FormBody from "./AuthFormPartials/FormBody"
 import PasswordInput from "./AuthFormPartials/PaswordInput"
 import Divider from "./AuthFormPartials/Divider"
 import AlertElement from "../Partials/AlertElement"
 import Navigation from "../Partials/Navigation"
+
 
 const ChangePassForm = () => {
   const [oldPassword, setOldPassword] = useState("")
@@ -22,9 +24,7 @@ const ChangePassForm = () => {
   const {auth, setAuth} = useAuth()
   const axiosPrivate = useAxiosPrivate()
 
-  // const navigate = useNavigate()
-  // const location = useLocation()
-  // const from = location.state?.from?.pathname || "/"
+  const navigate = useNavigate()
 
   useEffect(() => {
     // oldPasswordRef.current.focus()
@@ -54,21 +54,32 @@ const ChangePassForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (password1 !== password2) setErrMsg("Passwords don't match")
-    else changePassword({old_password: oldPassword, password1, password2})
+    let errors = ""
+    if (!isStrongPassword(oldPassword)) errors += "$#Current password does not match criteria"
+    if (!isStrongPassword(password1)) errors += "$#New password (line 1) does not match criteria"
+    if (!isStrongPassword(password2)) errors += "$#New password (line 2) does not match criteria"
+    if (password1 !== password2) errors += "$#Passwords don't match"
+
+    if (errors.length > 0) setErrMsg(errors)
+    else changePassword({
+      "username": auth?.username,
+      "password": oldPassword,
+      password1,
+      password2,
+    })
   }
 
   const changePassword = async (data) => {
-    console.log("change:", data)
-    // TODO: setAuth to {}, navigate to auth page with info
-    // try {
-    //   const response = await axiosPrivate.post("/users/change_password", JSON.stringify(data))
-    //   if (response.status === 200) {
-    //     console.log(response.data)
-    //   } else setErrMsg("Error while changing password")
-    // } catch (err) {
-    //   handleAxiosErrors(err, setErrMsg)
-    // }
+    try {
+      const response = await axiosPrivate.put("/users/me", JSON.stringify(data))
+      if (response.status === 200) {
+        resetForm()
+        setAuth({})
+        navigate("/auth", {state: {"infoMsg": "Successfully changed password. Log in with new credentials."}})
+      } else setErrMsg("Error while changing password")
+    } catch (err) {
+      handleAxiosErrors(err, setErrMsg)
+    }
   }
 
   const wideButtonClass = (type) => `btn btn-${type} btn-lg w-100 shadow mt-1`
@@ -106,12 +117,12 @@ const ChangePassForm = () => {
           <button
             className={wideButtonClass("dark")}
             type="submit"
-            disabled={false}
+            disabled={!(isValidOldPassword && isValidPassword1 && isValidPassword2)}
           >Change password
           </button>
         </form>
 
-        <AlertElement showAlert={errMsg.length > 0} text={errMsg} setErrMsg={setErrMsg}/>
+        <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg}/>
       </FormBody>
     </>
   )

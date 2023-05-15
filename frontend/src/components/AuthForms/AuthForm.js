@@ -16,7 +16,6 @@ import Divider from "./AuthFormPartials/Divider"
 import AlertElement from "../Partials/AlertElement"
 
 
-
 const AuthForm = () => {
   const [formType, setFormType] = useState(login)
   const [username, setUsername] = useState("")
@@ -35,6 +34,7 @@ const AuthForm = () => {
   useEffect(() => {
     usernameRef.current.focus()
     location?.state?.infoMsg && setInfoMsg(location?.state?.infoMsg)
+    window.history.replaceState({}, document.title)
   }, [])
 
 

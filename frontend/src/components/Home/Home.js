@@ -38,7 +38,7 @@ const Home = () => {
 
         {tasks.map(item => <Task key={item.id} task={item} setTasks={setTasks}/>)}
 
-        <AlertElement showAlert={errMsg.length > 0} text={errMsg} setErrMsg={setErrMsg}/>
+        <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg}/>
       </div>
     </section>
   )

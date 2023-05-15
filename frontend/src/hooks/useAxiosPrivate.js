@@ -30,7 +30,10 @@ const useAxiosPrivate = () => {
           prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
           return axiosPrivate(prevRequest)
         }
-        return navigate("/auth", {state: {"infoMsg": "Session expired. Please log in again to gain access."}})
+        if (error?.response?.status === 401) {
+          return navigate("/auth", {state: {"infoMsg": "Session expired. Please log in again to gain access."}})
+        } else return Promise.reject(error)
+
       }
     );
 

@@ -65,7 +65,7 @@ const Operations = (props) => {
                       withButton={true}/>
         </form>
       </div>
-      <AlertElement showAlert={errMsg.length > 0} text={errMsg} setErrMsg={setErrMsg}/>
+      <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg}/>
 
       <ul className="list-group list-group-flush">
         {props.children}

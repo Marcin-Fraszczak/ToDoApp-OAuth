@@ -87,7 +87,7 @@ const NewTask = (props) => {
             </div>
           </form>
 
-          <AlertElement showAlert={errMsg.length > 0} text={errMsg} setErrMsg={setErrMsg}/>
+          <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg}/>
 
         </CardBody>
       </div>

@@ -5,12 +5,15 @@ const AlertElement = (props) => {
   const [show, setShow] = useState(props.showAlert)
   const [alertText, setAlertText] = useState(props.text)
 
+  const handleEsc = (e) => e.key === 'Escape' && hideText()
+
   useEffect(() => {
-    let timeoutId
-    if (props.info) {
-      timeoutId = setTimeout(hideErrors, 3000)
+    const timeoutId = setTimeout(hideText, 3000)
+    window.addEventListener('keydown', handleEsc)
+    return () => {
+      clearTimeout(timeoutId)
+      window.removeEventListener('keydown', handleEsc)
     }
-    return () => clearTimeout(timeoutId)
   }, [])
 
   useEffect(() => {
@@ -32,7 +35,7 @@ const AlertElement = (props) => {
     transform: "translate(0, -50%)"
   }
 
-  const hideErrors = () => {
+  const hideText = () => {
     setShow(false)
     props.setText("")
   }
@@ -40,10 +43,10 @@ const AlertElement = (props) => {
   if (show) {
     return (
       <div style={style}>
-        <Alert variant={props.info ? "success" : "danger"} onClose={hideErrors} dismissible>
+        <Alert variant={props.info ? "success" : "danger"} onClose={hideText} dismissible>
           <Alert.Heading>{props.info ? "Info" : "Error!"}</Alert.Heading>
           <p>
-            {alertText}
+            {alertText.includes("$#") ? alertText.split("$#").map(item => <p key={item}>{item}</p>) : alertText}
           </p>
         </Alert>
       </div>

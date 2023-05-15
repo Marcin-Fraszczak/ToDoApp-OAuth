@@ -4,12 +4,12 @@ import {useNavigate} from "react-router-dom"
 const ChillOut = () => {
   const [date, setDate] = useState("")
   const [time, setTime] = useState("")
-  const [showButton, setShowButton] = useState(false)
+  const [show, setShow] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
     const intervalId = setInterval(getTime, 1000)
-    const timeoutId = setTimeout(() => setShowButton(true), 1500)
+    const timeoutId = setTimeout(() => setShow(true), 800)
 
     return () => {
       clearInterval(intervalId)
@@ -36,12 +36,11 @@ const ChillOut = () => {
   return (
     <div className="d-flex">
       <div className="text-white text-center" style={clockStyle}>
-        <div>{date}</div>
-        <div>{time}</div>
-        {showButton &&
-          <button className="btn btn-sm btn-outline-secondary" onClick={() => navigate("/")}>Back To Work</button>
-        }
-
+          <div className={`clock ${show && 'show'}`}>
+            <div>{date}</div>
+            <div>{time}</div>
+            <button className="btn btn-sm btn-outline-secondary" onClick={() => navigate("/")}>Back To Work</button>
+          </div>
       </div>
     </div>
   )

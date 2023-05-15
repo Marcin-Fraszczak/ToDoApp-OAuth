@@ -2,9 +2,10 @@ from os import getenv
 from typing import Annotated
 from fastapi import Depends, APIRouter, Response, Request
 from fastapi.security import OAuth2PasswordRequestForm
+from pymongo.errors import OperationFailure, ServerSelectionTimeoutError
 
 from . import helpers as uf
-from .models import User, Token
+from .models import User, Token, UserInDB
 from ..common.db import users_db
 from ..common import HTTP_exceptions as exc
 
@@ -54,7 +55,7 @@ async def refresh_access_token(request: Request):
 		raise exc.invalid_credentials
 
 
-@users.get("/logout")
+@users.post("/logout")
 async def logout_user(*, response: Response, request: Request):
 	refresh_token = request.cookies.get("refresh_token")
 	if refresh_token:
@@ -62,3 +63,29 @@ async def logout_user(*, response: Response, request: Request):
 		updated = users_db.update_many({"refresh_token": refresh_token}, {"$set": {"refresh_token": ""}})
 
 	return {"logged out"}
+
+
+@users.put("/me")
+async def change_password(*, user: Annotated[UserInDB, Depends(uf.get_current_user)],
+						  request: Request, response: Response):
+	body = await request.json()
+	if not uf.verify_password(body.get("password"), user.hashed_password):
+		raise exc.wrong_password
+	pass1, pass2 = body.get("password1"), body.get("password2")
+	if not (pass1 and pass2 and pass1 == pass2):
+		raise exc.passwords_dont_match
+	try:
+		updated = users_db.update_one({"username": user.username},
+									  {"$set":
+										  {
+											  "hashed_password": uf.get_password_hash(pass1),
+											  "refresh_token": ""
+										  }
+									  })
+		if updated.matched_count == 1:
+			response.delete_cookie("refresh_token")
+			return {"success": "ok"}
+		else:
+			raise exc.not_found
+	except (OperationFailure, ServerSelectionTimeoutError):
+		raise exc.database_error

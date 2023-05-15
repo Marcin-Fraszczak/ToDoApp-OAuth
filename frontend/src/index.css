@@ -6,9 +6,11 @@ body {
     /*background: url(https://i.pinimg.com/originals/44/6e/3b/446e3b79395a287ca32f7977dd83b290.jpg);*/
     background: url('../public/background.jpg');
     background-size: cover;
-    overflow: hidden;
 }
 
+body::-webkit-scrollbar {
+    display: none;
+}
 
 /*custom checkbox*/
 .chkbx input[type=checkbox] {
@@ -55,6 +57,7 @@ body {
     border-color: #ffffff;
 }
 
+/*homepage smooth scroll*/
 .homepage {
     transform: translateY(0%);
     transition: all 0.5s ease-in-out;
@@ -83,14 +86,43 @@ body {
 }
 
 .addNewTaskButton svg {
-    transform: rotate(0);
+    transform: rotate(180deg);
     transition: all 0.5s ease-in-out;
 }
 
 .addNewTaskButton svg.open {
-    transform: rotate(180deg);
+    transform: rotate(0deg);
 }
 
+
+/*clock*/
+.clock {
+    scale: 1.1;
+    opacity: 0;
+}
+
+.clock.show {
+    opacity: 1;
+    scale: 1;
+    transition: all 2s ease-out;
+}
+
+/*missing page*/
+.missing {
+    opacity: 0;
+    transform: translateY(-5%);
+    scale: 0.85;
+}
+
+.missing.show {
+    opacity: 1;
+    transform: translateY(-10%);
+    scale: 0.8;
+    transition: all 0.25s ease-in-out;
+}
+
+
+/*background*/
 .firefly {
     position: fixed;
     left: 50%;

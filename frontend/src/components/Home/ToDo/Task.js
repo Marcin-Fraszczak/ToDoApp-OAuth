@@ -118,7 +118,7 @@ const Task = (props) => {
             key={item.id} operation={item} taskFinished={task.finished} setOperations={setOperations}/>)}
       </Operations>
 
-      <AlertElement showAlert={errMsg.length > 0} text={errMsg} setErrMsg={setErrMsg}/>
+      <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg}/>
     </CardBody>
   )
 }
