@@ -3,14 +3,22 @@ import Alert from 'react-bootstrap/Alert'
 
 const AlertElement = (props) => {
   const [show, setShow] = useState(props.showAlert)
-  const [text, setText] = useState(props.text)
+  const [alertText, setAlertText] = useState(props.text)
+
+  useEffect(() => {
+    let timeoutId
+    if (props.info) {
+      timeoutId = setTimeout(hideErrors, 3000)
+    }
+    return () => clearTimeout(timeoutId)
+  }, [])
 
   useEffect(() => {
     setShow(props.showAlert)
   }, [props.showAlert])
 
   useEffect(() => {
-    setText(props.text)
+    setAlertText(props.text)
   }, [props.text])
 
   const style = {
@@ -26,18 +34,18 @@ const AlertElement = (props) => {
 
   const hideErrors = () => {
     setShow(false)
-    props.setErrMsg("")
+    props.setText("")
   }
 
   if (show) {
     return (
       <div style={style}>
-          <Alert variant="danger" onClose={hideErrors} dismissible>
-            <Alert.Heading>Error!</Alert.Heading>
-            <p>
-              {text}
-            </p>
-          </Alert>
+        <Alert variant={props.info ? "success" : "danger"} onClose={hideErrors} dismissible>
+          <Alert.Heading>{props.info ? "Info" : "Error!"}</Alert.Heading>
+          <p>
+            {alertText}
+          </p>
+        </Alert>
       </div>
     )
   }

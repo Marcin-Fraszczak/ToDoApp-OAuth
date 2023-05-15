@@ -15,7 +15,7 @@ const Navigation = () => {
 
   const logoutUser = async () => {
     await logout()
-    navigate('/auth')
+    navigate('/auth', {state: {"infoMsg": "Successfully logged out."}})
   }
 
   const navbarStyle = {
@@ -35,6 +35,7 @@ const Navigation = () => {
           <Button variant={buttonVariant} onClick={() => navigate("/chill")}>Chill</Button>
           <span className="text-white-50 mx-4">{auth.username}</span>
           <Timer/>
+          <Button variant={buttonVariant} onClick={() => navigate("/change_password")}>Change Password</Button>
           <Button variant={buttonVariant} onClick={logoutUser}>Log out</Button>
 
         </Navbar.Collapse>

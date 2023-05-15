@@ -17,7 +17,8 @@ class User(BaseUser):
 	def validate_password(cls, value):
 		password = value.get_secret_value()
 		min_length = 8
-		special_numbers = [i for i in range(33, 65)] + [i for i in range(91, 97)] + [i for i in range(123, 127)]
+		special_numbers = [i for i in range(33, 47)] + [i for i in range(58, 63)] \
+						  + [i for i in range(91, 97)] + [i for i in range(123, 127)]
 		specials = [chr(i) for i in special_numbers]
 		errors = ''
 		if len(password) < min_length:
@@ -26,6 +27,8 @@ class User(BaseUser):
 			errors += 'Password should contain at least one lowercase character.'
 		if not any(character.isupper() for character in password):
 			errors += 'Password should contain at least one uppercase character.'
+		if not any(character.isdigit() for character in password):
+			errors += 'Password should contain at least one digit.'
 		if not any(character in specials for character in password):
 			errors += 'Password should contain at least one digit or a special sign.'
 		if errors:

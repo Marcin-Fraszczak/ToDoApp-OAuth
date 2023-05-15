@@ -7,6 +7,7 @@ const useRefreshToken = () => {
   const decodeToken = useDecodeToken()
 
   const refresh = async () => {
+    try {
     const response = await axios.get('users/token/refresh', {
       withCredentials: true
     })
@@ -18,6 +19,9 @@ const useRefreshToken = () => {
       }
     })
     return response.data.access_token
+  } catch (err) {
+      // console.log("errror w userefresh", err)
+    }
   }
   return refresh
 }

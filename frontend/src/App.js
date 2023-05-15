@@ -5,10 +5,11 @@ import Layout from "./components/Layout"
 import PersistLogin from "./components/PersistLogin"
 import RequireAuth from "./components/RequireAuth"
 import Missing from "./components/Missing"
-import AuthForm from "./components/AuthForm/AuthForm"
+import AuthForm from "./components/AuthForms/AuthForm"
 import Home from "./components/Home/Home"
 import Spinner from "./components/Spinner"
 import ChillOut from "./components/ChillOut"
+import ChangePassForm from "./components/AuthForms/ChangePassForm"
 
 const App = () => {
 
@@ -25,6 +26,7 @@ const App = () => {
           <Route element={<PersistLogin/>}>
             <Route element={<RequireAuth/>}>
               <Route path="/" element={<Home/>}/>
+              <Route path="change_password" element={<ChangePassForm/>}/>
             </Route>
           </Route>
 

@@ -59,9 +59,6 @@ async def logout_user(*, response: Response, request: Request):
 	refresh_token = request.cookies.get("refresh_token")
 	if refresh_token:
 		response.delete_cookie("refresh_token")
-		user = await uf.get_current_user(refresh_token)
-		if user.username:
-			response.delete_cookie("refresh_token")
-			uf.delete_refresh_token(user.username)
+		updated = users_db.update_many({"refresh_token": refresh_token}, {"$set": {"refresh_token": ""}})
 
 	return {"logged out"}

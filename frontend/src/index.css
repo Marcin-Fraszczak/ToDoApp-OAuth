@@ -6,6 +6,7 @@ body {
     /*background: url(https://i.pinimg.com/originals/44/6e/3b/446e3b79395a287ca32f7977dd83b290.jpg);*/
     background: url('../public/background.jpg');
     background-size: cover;
+    overflow: hidden;
 }
 
 
@@ -52,6 +53,42 @@ body {
 
 .chkbx :checked ~ .x {
     border-color: #ffffff;
+}
+
+.homepage {
+    transform: translateY(0%);
+    transition: all 0.5s ease-in-out;
+}
+
+.homepage.high {
+    transform: translateY(-12rem);
+    transition: all 0.5s ease-in-out;
+}
+
+.newTaskForm {
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+.newTaskForm.show {
+    opacity: 1;
+}
+
+.addNewTaskButton {
+    opacity: 0.95;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) translateY(1.5rem);
+    z-index: 2;
+}
+
+.addNewTaskButton svg {
+    transform: rotate(0);
+    transition: all 0.5s ease-in-out;
+}
+
+.addNewTaskButton svg.open {
+    transform: rotate(180deg);
 }
 
 .firefly {

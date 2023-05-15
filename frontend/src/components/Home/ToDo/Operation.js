@@ -6,7 +6,7 @@ import {handleAxiosErrors} from "../../../api/axios"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 
 import NumberInput from "./ToDoPartials/NumberInput"
-import AlertElement from "../../Partials/Alert"
+import AlertElement from "../../Partials/AlertElement"
 
 const Operation = (props) => {
   const [showForm, setShowForm] = useState(false)
@@ -19,12 +19,21 @@ const Operation = (props) => {
   const axiosPrivate = useAxiosPrivate()
   const timeRef = useRef()
 
+  const handleEsc = (e) => {
+    if (e.key === 'Escape' && document.activeElement === timeRef.current) {
+      hideTimeForm()
+      setShowForm(false)
+    }
+  }
+
   useEffect(() => {
     time && setIsValidTime(isInt(time))
   }, [time])
 
   useEffect(() => {
     hideTimeForm()
+    window.addEventListener('keydown', handleEsc)
+    return () => window.removeEventListener('keydown', handleEsc)
   }, [])
 
   useEffect(() => {

@@ -95,14 +95,6 @@ async def add_user_to_db(db, user):
 		raise exc.database_error
 
 
-def delete_refresh_token(username: EmailStr):
-	try:
-		updated = users_db.update_one({"username": username}, {"$set": {"refresh_token": ""}})
-		return updated.modified_count
-	except (OperationFailure, ServerSelectionTimeoutError):
-		raise exc.database_error
-
-
 def validate_email_address(address):
 	try:
 		clean_address = validate_email(address, check_deliverability=False)

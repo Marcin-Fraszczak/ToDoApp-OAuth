@@ -5,7 +5,7 @@ import {handleAxiosErrors} from "../../../api/axios"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 
 import CardBody from "./ToDoPartials/CardBody"
-import AlertElement from "../../Partials/Alert"
+import AlertElement from "../../Partials/AlertElement"
 import Operations from "./Operations"
 import Operation from "./Operation"
 
@@ -113,7 +113,7 @@ const Task = (props) => {
 
       </div>
 
-      <Operations taskId={task.id} showForm={showForm} setOperations={setOperations}>
+      <Operations taskId={task.id} showForm={showForm} setShowForm={setShowForm} setOperations={setOperations}>
           {operations && operations.map(item => <Operation
             key={item.id} operation={item} taskFinished={task.finished} setOperations={setOperations}/>)}
       </Operations>

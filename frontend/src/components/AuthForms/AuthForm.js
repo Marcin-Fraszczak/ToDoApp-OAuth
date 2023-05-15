@@ -4,16 +4,17 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faGoogle} from "@fortawesome/free-brands-svg-icons"
 import isEmail from "validator/es/lib/isEmail"
 import isStrongPassword from "validator/es/lib/isStrongPassword"
+import normalizeEmail from "validator/es/lib/normalizeEmail"
 import axios, {handleAxiosErrors, axiosJson} from "../../api/axios"
 import useAuth from "../../hooks/useAuth"
-
 import FormBody from "./AuthFormPartials/FormBody"
 import TopButtons, {login} from "./AuthFormPartials/TopButtons"
 import UsernameInput from "./AuthFormPartials/UsernameInput"
 import PasswordInput from "./AuthFormPartials/PaswordInput"
 import CheckBox from "./AuthFormPartials/Checkbox"
 import Divider from "./AuthFormPartials/Divider"
-import AlertElement from "../Partials/Alert"
+import AlertElement from "../Partials/AlertElement"
+
 
 
 const AuthForm = () => {
@@ -23,6 +24,7 @@ const AuthForm = () => {
   const [password, setPassword] = useState("")
   const [isValidPassword, setIsValidPassword] = useState(false)
   const [errMsg, setErrMsg] = useState("")
+  const [infoMsg, setInfoMsg] = useState("")
 
   const usernameRef = useRef()
   const {setAuth, persist, setPersist} = useAuth()
@@ -32,6 +34,7 @@ const AuthForm = () => {
 
   useEffect(() => {
     usernameRef.current.focus()
+    location?.state?.infoMsg && setInfoMsg(location?.state?.infoMsg)
   }, [])
 
 
@@ -95,7 +98,7 @@ const AuthForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (isValidUsername && isValidPassword) {
-      const data = {username, password}
+      const data = {username: normalizeEmail(username), password}
       formType === login
         ? loginUser(data)
         : registerUser(data)
@@ -119,6 +122,7 @@ const AuthForm = () => {
           password={password}
           setPassword={setPassword}
           isValidPassword={isValidPassword}
+          placeholder="password..."
         />
         <CheckBox persist={persist} setPersist={setPersist}/>
         <button
@@ -128,14 +132,15 @@ const AuthForm = () => {
         >{formType}</button>
       </form>
 
-      <Divider/>
+      <Divider centerText="OR"/>
 
       <button className={wideButtonClass("dark")} style={{opacity: "0.8"}}>
         <FontAwesomeIcon icon={faGoogle} className="me-3" size="xl"/>
         Continue with google
       </button>
 
-      <AlertElement showAlert={errMsg.length > 0} text={errMsg} setErrMsg={setErrMsg}/>
+      <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg}/>
+      <AlertElement showAlert={infoMsg.length > 0} text={infoMsg} setText={setInfoMsg} info={true}/>
     </FormBody>
   )
 }

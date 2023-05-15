@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom"
-import FormBody from "./AuthForm/AuthFormPartials/FormBody"
+import FormBody from "./AuthForms/AuthFormPartials/FormBody"
 
 const Missing = () => {
   const buttonGroupStyle = "mt-4 d-flex justify-content-around"

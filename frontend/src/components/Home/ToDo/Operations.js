@@ -4,7 +4,7 @@ import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 import useTextValidator from "../../../hooks/useTextValidator"
 
 import TitleInput from "./ToDoPartials/TitleInput"
-import AlertElement from "../../Partials/Alert"
+import AlertElement from "../../Partials/AlertElement"
 
 const Operations = (props) => {
   const [title, setTitle] = useState('')
@@ -14,12 +14,26 @@ const Operations = (props) => {
   const axiosPrivate = useAxiosPrivate()
   const textValidator = useTextValidator()
 
+  const handleEsc = (e) => {
+    if (e.key === 'Escape' && document.activeElement === titleRef.current) {
+      resetForm()
+      props.setShowForm(false)
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleEsc)
+    return () => window.removeEventListener('keydown', handleEsc)
+  }, [])
+
   useEffect(() => {
     setIsValidTitle(textValidator(title, 3))
   }, [title])
 
   useEffect(() => {
-    props.showForm && titleRef.current.focus()
+    props.showForm
+      ? titleRef.current.focus()
+      : resetForm()
   }, [props.showForm])
 
   const addOperation = async (e) => {

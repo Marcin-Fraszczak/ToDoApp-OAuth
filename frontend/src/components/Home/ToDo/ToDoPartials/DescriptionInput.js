@@ -1,5 +1,5 @@
 import React from "react"
-import TooltipElement from "../../../AuthForm/AuthFormPartials/Tooltip"
+import TooltipElement from "../../../AuthForms/AuthFormPartials/Tooltip"
 
 const DescriptionInput = (props) => {
 
@@ -13,6 +13,7 @@ const DescriptionInput = (props) => {
           className='form-control shadow-lg'
           placeholder="description..."
           style={{backgroundColor: "#D1E2DB"}}
+          ref={props.descRef}
         />
         <TooltipElement type='description'/>
       </div>
