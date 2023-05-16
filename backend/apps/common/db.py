@@ -1,7 +1,7 @@
-from os import getenv
+import os
 from pymongo import MongoClient
 
-mongo_uri = getenv("MONGODB_CONNECTION_STRING")
+mongo_uri = os.getenv("MONGODB_CONNECTION_STRING")
 client = MongoClient(mongo_uri, serverSelectionTimeoutMS=2000)
 
 db = client['todos']

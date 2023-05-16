@@ -1,3 +1,5 @@
+from typing import List
+
 from pydantic import BaseModel, EmailStr, SecretStr, validator
 
 
@@ -41,3 +43,8 @@ class UserInDB(BaseUser):
 	hashed_password: str
 	refresh_token: str = ""
 	active: bool = False
+	verified: bool = False
+
+
+class Email(BaseModel):
+	email: List[EmailStr]

@@ -30,5 +30,5 @@ app.add_middleware(
 )
 
 if __name__ == "__main__":
-	load_dotenv()
+	load_dotenv('.env')
 	uvicorn.run("main:app", port=8000, reload=True)

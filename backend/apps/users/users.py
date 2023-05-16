@@ -8,6 +8,7 @@ from . import helpers as uf
 from .models import User, Token, UserInDB
 from ..common.db import users_db
 from ..common import HTTP_exceptions as exc
+from .email import send_in_background
 
 ACCESS_TOKEN_EXPIRES = getenv("ACCESS_TOKEN_LIFETIME_SECONDS", 30)
 REFRESH_TOKEN_EXPIRES = getenv("REFRESH_TOKEN_LIFETIME_SECONDS", 3600)
@@ -89,3 +90,13 @@ async def change_password(*, user: Annotated[UserInDB, Depends(uf.get_current_us
 			raise exc.not_found
 	except (OperationFailure, ServerSelectionTimeoutError):
 		raise exc.database_error
+
+
+from fastapi.responses import JSONResponse
+from fastapi import BackgroundTasks
+from .models import Email
+
+
+@users.post("/emailbackground")
+async def send_in_bg(background_tasks: BackgroundTasks, email: Email) -> JSONResponse:
+	return await send_in_background(background_tasks, email)
