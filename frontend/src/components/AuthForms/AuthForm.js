@@ -7,6 +7,7 @@ import isStrongPassword from "validator/es/lib/isStrongPassword"
 import normalizeEmail from "validator/es/lib/normalizeEmail"
 import axios, {handleAxiosErrors, axiosJson} from "../../api/axios"
 import useAuth from "../../hooks/useAuth"
+import useDecodeToken from "../../hooks/useDecodeToken"
 import FormBody from "./AuthFormPartials/FormBody"
 import TopButtons, {login} from "./AuthFormPartials/TopButtons"
 import UsernameInput from "./AuthFormPartials/UsernameInput"
@@ -26,10 +27,11 @@ const AuthForm = () => {
   const [infoMsg, setInfoMsg] = useState("")
 
   const usernameRef = useRef()
-  const {setAuth, persist, setPersist} = useAuth()
+  const {auth, setAuth, persist, setPersist} = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || "/"
+  const decodeToken = useDecodeToken()
 
   useEffect(() => {
     usernameRef.current.focus()
@@ -55,6 +57,14 @@ const AuthForm = () => {
   useEffect(() => {
     localStorage.setItem("persist", persist)
   }, [persist])
+  //
+  // useEffect(() => {
+  //   !infoMsg && window.history.replaceState({}, document.title)
+  // }, [infoMsg])
+  //
+  // useEffect(() => {
+  //   !errMsg && window.history.replaceState({}, document.title)
+  // }, [errMsg])
 
   const resetForm = () => {
     setUsername("")
@@ -70,14 +80,18 @@ const AuthForm = () => {
       const response = await axiosJson.post("/users", JSON.stringify(data))
       if (response.status === 200) {
         resetForm()
-        await loginUser(data)
+        const verificationMsg =
+          `Email with verification link has been sent to ${data.username}.$#
+           Verification is optional, it just adds one bonus feature. $#
+           Your account is already fully operational.`
+        await loginUser(data, verificationMsg)
       }
     } catch (err) {
       handleAxiosErrors(err, setErrMsg)
     }
   }
 
-  const loginUser = async (data) => {
+  const loginUser = async (data, msg = "") => {
     try {
       const userForm = new FormData()
       userForm.append("username", data.username)
@@ -85,8 +99,9 @@ const AuthForm = () => {
       const response = await axios.post("/users/token", userForm, {withCredentials: true})
       if (response.status === 200) {
         resetForm()
-        setAuth({username: data.username, accessToken: response?.data?.access_token})
-        navigate(from, {replace: true})
+        const decoded = decodeToken(response?.data?.access_token)
+        setAuth({username: decoded?.sub, verified: decoded?.ver, accessToken: response?.data?.access_token})
+        navigate(from, {replace: true, state: {"infoMsg": msg}})
       } else {
         setErrMsg("Error while logging in")
       }

@@ -8,18 +8,20 @@ const useRefreshToken = () => {
 
   const refresh = async () => {
     try {
-    const response = await axios.get('users/token/refresh', {
-      withCredentials: true
-    })
-    setAuth(prev => {
-      return {
-        ...prev,
-        username: decodeToken(response.data.access_token)?.sub,
-        accessToken: response.data.access_token
-      }
-    })
-    return response.data.access_token
-  } catch (err) {
+      const response = await axios.get('users/token/refresh', {
+        withCredentials: true
+      })
+      const decoded = decodeToken(response.data.access_token)
+      setAuth(prev => {
+        return {
+          ...prev,
+          username: decoded?.sub,
+          verified: decoded?.ver,
+          accessToken: response.data.access_token
+        }
+      })
+      return response.data.access_token
+    } catch (err) {
       // console.log("errror w userefresh", err)
     }
   }

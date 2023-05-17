@@ -1,11 +1,13 @@
 import {useEffect, useState} from "react"
 import useAuth from "../../hooks/useAuth"
 import useDecodeToken from "../../hooks/useDecodeToken"
+import RefreshIcon from "./RefreshIcon"
 
 const Timer = () => {
   const [time, setTime] = useState(0)
   const {auth} = useAuth()
   const decodeToken = useDecodeToken()
+
 
   useEffect(() => {
     const timeoutId = setTimeout(calculateTime, 1000)
@@ -28,6 +30,7 @@ const Timer = () => {
       <div>
         <span className="text-white">Access Token</span>
         <span className={`text-${time >= 0 ? 'white' : 'danger'} mx-2`}>{displayTime()}</span>
+        <RefreshIcon/>
       </div>
     </>
   )

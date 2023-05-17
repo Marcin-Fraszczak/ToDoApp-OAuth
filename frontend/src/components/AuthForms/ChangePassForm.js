@@ -75,7 +75,7 @@ const ChangePassForm = () => {
       if (response.status === 200) {
         resetForm()
         setAuth({})
-        navigate("/auth", {state: {"infoMsg": "Successfully changed password. Log in with new credentials."}})
+        navigate("/auth", {state: {"infoMsg": "Successfully changed password.$# Log in with new credentials."}})
       } else setErrMsg("Error while changing password")
     } catch (err) {
       handleAxiosErrors(err, setErrMsg)

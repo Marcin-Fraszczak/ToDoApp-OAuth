@@ -11,7 +11,7 @@ from email_validator import validate_email, EmailNotValidError
 
 from .models import BaseUser, UserInDB
 from ..common import HTTP_exceptions as exc
-from ..common.db import users_db
+from ..common.db import users_db, tasks_db, operations_db
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -29,11 +29,11 @@ def get_password_hash(password):
 	return pwd_context.hash(password)
 
 
-def create_token(username: EmailStr, expires_delta: int | None = None):
+def create_token(username: EmailStr, expires_delta: int | None = None, verified: bool = False):
 	if not expires_delta:
 		expires_delta = 30
 	expire = datetime.utcnow() + timedelta(seconds=expires_delta)
-	to_encode = {"sub": username, "exp": expire}
+	to_encode = {"sub": username, "exp": expire, "ver": verified}
 	encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 	return encoded_jwt
 
@@ -68,15 +68,13 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 	return user
 
 
-async def get_current_active_user(
-		current_user: Annotated[UserInDB, Depends(get_current_user)]
-):
+async def get_current_active_user(current_user: Annotated[UserInDB, Depends(get_current_user)]):
 	if not current_user.active:
 		raise exc.inactive_user
 	return current_user
 
 
-async def add_user_to_db(db, user):
+async def add_user_to_db(db, user) -> BaseUser:
 	user.username = validate_email_address(user.username)
 	exists = await get_user(db, user.username)
 	if exists:
@@ -96,12 +94,26 @@ async def add_user_to_db(db, user):
 
 
 def validate_email_address(address):
+	# try:
+	# 	print(address)
+	# 	clean_address = validate_email(address, check_deliverability=False)
+	# 	print(clean_address)
+	# 	return clean_address.normalized
+	# except (EmailNotValidError, AttributeError) as e:
+	# 	print(e)
+	# 	raise exc.invalid_email
+	return address
+
+
+def delete_all_users_todos(username):
+	if not username:
+		raise exc.not_found
 	try:
-		clean_address = validate_email(address, check_deliverability=False)
-		return clean_address.normalized
-	except EmailNotValidError as e:
-		print(e)
-		raise exc.invalid_email
+		opers = operations_db.delete_many({"owner": username})
+		tasks = tasks_db.delete_many({"owner": username})
+		return {"tasks": tasks.deleted_count, "operations": opers.deleted_count}
+	except (OperationFailure, ServerSelectionTimeoutError):
+		raise exc.database_error
 
 # async def get_current_user_from_header(request: Request):
 # 	access_token_string = request.headers.get("Authorization")

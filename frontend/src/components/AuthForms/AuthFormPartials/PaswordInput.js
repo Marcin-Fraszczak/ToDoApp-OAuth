@@ -1,5 +1,5 @@
 import React from "react"
-import TooltipElement from "./Tooltip"
+import TooltipElement from "./InputTooltip"
 
 const PasswordInput = (props) => {
 

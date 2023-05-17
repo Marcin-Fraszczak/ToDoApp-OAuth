@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react"
+import {useLocation} from "react-router-dom"
 import {handleAxiosErrors} from "../../api/axios"
 import NewTask from "./ToDo/NewTask"
 import Task from "./ToDo/Task"
@@ -11,12 +12,15 @@ const Home = () => {
   const [showForm, setShowForm] = useState(false)
   const [tasks, setTasks] = useState([])
   const [errMsg, setErrMsg] = useState("")
+  const [infoMsg, setInfoMsg] = useState("")
   const axiosPrivate = useAxiosPrivate()
+  const location = useLocation()
 
   useEffect(() => {
     getTasks()
+    location?.state?.infoMsg && setInfoMsg(location?.state?.infoMsg)
+    window.history.replaceState({}, document.title)
   }, [])
-
 
   const getTasks = async () => {
     try {
@@ -38,7 +42,8 @@ const Home = () => {
 
         {tasks.map(item => <Task key={item.id} task={item} setTasks={setTasks}/>)}
 
-        <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg}/>
+        <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg} fullScreen={true}/>
+        <AlertElement showAlert={infoMsg.length > 0} text={infoMsg} setText={setInfoMsg} info={true} fullScreen={true}/>
       </div>
     </section>
   )

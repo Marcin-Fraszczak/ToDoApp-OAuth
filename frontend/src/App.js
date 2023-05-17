@@ -10,6 +10,7 @@ import Home from "./components/Home/Home"
 import Spinner from "./components/Spinner"
 import ChillOut from "./components/ChillOut"
 import ChangePassForm from "./components/AuthForms/ChangePassForm"
+import VerifyForm from "./components/AuthForms/VerifyForm"
 
 const App = () => {
 
@@ -19,6 +20,7 @@ const App = () => {
 
           {/* public routes */}
           <Route path="auth" element={<AuthForm/>}/>
+          <Route path="verify" element={<VerifyForm/>}/>
           <Route path="chill" element={<ChillOut/>}/>
           <Route path="spin" element={<Spinner/>}/>
 
