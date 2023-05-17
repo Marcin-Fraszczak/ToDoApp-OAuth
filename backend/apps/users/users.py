@@ -1,11 +1,11 @@
 from os import getenv
 from typing import Annotated
-from fastapi import Depends, APIRouter, Response, Request, BackgroundTasks
+from fastapi import Depends, APIRouter, Response, Request, BackgroundTasks, Body
 from fastapi.security import OAuth2PasswordRequestForm
 from pymongo.errors import OperationFailure, ServerSelectionTimeoutError
 
 from . import helpers as uf
-from .models import User, Token, UserInDB, Email
+from .models import User, Token, UserInDB, Email, BaseUser
 from ..common.db import users_db
 from ..common import HTTP_exceptions as exc
 from .email import send_in_background
@@ -22,8 +22,7 @@ users = APIRouter(
 @users.post("/")
 async def register_user(*, user: User, background_tasks: BackgroundTasks):
 	new_user = await uf.add_user_to_db(users_db, user)
-	print("aaaa")
-	await send_in_background(background_tasks, Email(email=[user.username, ]))
+	await send_in_background(background_tasks, Email(email=[user.username, ]), email_type="verification")
 	return new_user
 
 
@@ -81,9 +80,26 @@ async def logout_user(*, response: Response, request: Request):
 	return {"logged out"}
 
 
-@users.get("/password_reset")
-async def send_reset_password_email(*, user: Annotated[UserInDB, Depends(uf.get_current_user)]):
-	pass
+@users.post("/password_reset", status_code=202)
+async def reset_users_password(*, user: BaseUser, background_tasks: BackgroundTasks):
+	email = uf.validate_email_address(user.username)
+	user_in_db = await uf.get_user(users_db, email)
+	if user_in_db:
+		await send_in_background(background_tasks, Email(email=[email, ]), email_type="reset")
+	return {"sent"}
+
+
+@users.put("/password_reset")
+async def set_new_users_password(*, token: str | None = None, password: Annotated[str, Body()]):
+	user = await uf.get_current_user(token)
+	new_user = User(username=user.username, password=password)
+	new_hashed_password = uf.get_password_hash(password)
+	try:
+		users_db.update_one({"username": user.username}, {"$set": {"hashed_password": new_hashed_password}})
+		user = UserInDB(**users_db.find_one({"username": user.username}))
+		return {"username": user.username}
+	except (OperationFailure, ServerSelectionTimeoutError):
+		raise exc.database_error
 
 
 @users.put("/me")
@@ -92,14 +108,14 @@ async def change_password(*, user: Annotated[UserInDB, Depends(uf.get_current_us
 	body = await request.json()
 	if not uf.verify_password(body.get("password"), user.hashed_password):
 		raise exc.wrong_password
-	pass1, pass2 = body.get("password1"), body.get("password2")
-	if not (pass1 and pass2 and pass1 == pass2):
+	new_pass = body.get("password1")
+	if not new_pass:
 		raise exc.passwords_dont_match
 	try:
 		updated = users_db.update_one({"username": user.username},
 									  {"$set":
 										  {
-											  "hashed_password": uf.get_password_hash(pass1),
+											  "hashed_password": uf.get_password_hash(new_pass),
 											  "refresh_token": ""
 										  }
 									  })

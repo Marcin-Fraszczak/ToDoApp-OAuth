@@ -61,7 +61,7 @@ const Operations = (props) => {
       <div className="card-body">
 
         <form hidden={!props.showForm} onSubmit={addOperation} noValidate={true}>
-          <TitleInput title={title} setTitle={setTitle} isValidTitle={isValidTitle} titleRef={titleRef}
+          <TitleInput title={title} setTitle={setTitle} isValidTitle={isValidTitle} propsRef={titleRef}
                       withButton={true}/>
         </form>
       </div>

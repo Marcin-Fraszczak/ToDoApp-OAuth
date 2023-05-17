@@ -13,7 +13,7 @@ const NumberInput = (props) => {
           onChange={(e) => props.setTime(e.target.value)}
           className="form-control shadow-lg"
           placeholder="Time..."
-          ref={props.timeRef}
+          ref={props?.propsRef}
           style={{backgroundColor: "#D1E2DB"}}
         />
 

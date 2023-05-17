@@ -28,7 +28,7 @@ const TitleInput = (props) => {
             }`
           }
           placeholder="title..."
-          ref={props.titleRef}
+          ref={props?.propsRef}
           required
           style={{backgroundColor: "#D1E2DB"}}
         />

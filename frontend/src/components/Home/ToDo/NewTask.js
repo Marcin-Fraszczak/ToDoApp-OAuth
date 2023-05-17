@@ -71,8 +71,8 @@ const NewTask = (props) => {
       <div className={`newTaskForm ${props.showForm && 'show'}`}>
         <CardBody>
           <form onSubmit={handleSubmit} noValidate={true} className="mt-5">
-            <TitleInput title={title} setTitle={setTitle} isValidTitle={isValidTitle} titleRef={titleRef}/>
-            <DescriptionInput description={description} setDescription={setDescription} descRef={descRef}/>
+            <TitleInput title={title} setTitle={setTitle} isValidTitle={isValidTitle} propsRef={titleRef}/>
+            <DescriptionInput description={description} setDescription={setDescription} propsRef={descRef}/>
 
             <div className="w-75 d-flex justify-content-between">
               <button className={wideButtonClass("dark")} type="submit" disabled={!isValidTitle}>

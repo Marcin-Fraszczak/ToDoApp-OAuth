@@ -20,7 +20,7 @@ const UsernameInput = (props) => {
             }`
           }
           placeholder="email..."
-          ref={props.usernameRef}
+          ref={props?.propsRef}
           required
           style={{backgroundColor: "#D1E2DB"}}
         />

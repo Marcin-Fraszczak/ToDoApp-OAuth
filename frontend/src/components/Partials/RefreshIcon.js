@@ -14,7 +14,10 @@ const RefreshIcon = () => {
                      rotation={clicked ? 90 : 0}
                      onClick={refresh}
                      onMouseEnter={() => setHovered(true)}
-                     onMouseLeave={() => setHovered(false)}
+                     onMouseLeave={() => {
+                       setHovered(false)
+                       setClicked(false)
+                     }}
                      onMouseDown={() => setClicked(true)}
                      onMouseUp={() => setClicked(false)}
     />

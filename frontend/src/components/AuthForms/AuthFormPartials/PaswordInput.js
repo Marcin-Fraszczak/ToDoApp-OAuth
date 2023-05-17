@@ -4,7 +4,7 @@ import TooltipElement from "./InputTooltip"
 const PasswordInput = (props) => {
 
   return (
-    <div className="form-outline mb-4">
+    <div className="form-outline my-2">
       <div className="input-group">
         <input
           type="password"
@@ -22,7 +22,7 @@ const PasswordInput = (props) => {
           placeholder={props.placeholder}
           required
           style={{backgroundColor: "#D1E2DB"}}
-          ref={props?.ref}
+          ref={props?.propsRef}
         />
         <TooltipElement type='password'/>
       </div>

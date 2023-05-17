@@ -114,7 +114,7 @@ const Operation = (props) => {
             hideTimeForm={hideTimeForm}
             time={time}
             setTime={setTime}
-            timeRef={timeRef}
+            propsRef={timeRef}
             isValidTime={isValidTime}/>
         </form>
       }

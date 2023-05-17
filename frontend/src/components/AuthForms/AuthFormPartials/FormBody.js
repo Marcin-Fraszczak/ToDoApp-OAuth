@@ -3,7 +3,7 @@ const FormBody = (props) => {
   const cardStyle = {
     borderRadius: "1.5rem",
     opacity: "0.93",
-    backgroundColor: "#375e5f"
+    backgroundColor: "#375e5f",
   }
 
   return (

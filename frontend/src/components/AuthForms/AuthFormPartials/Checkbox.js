@@ -3,7 +3,7 @@ import React from "react"
 const CheckBox = (props) => {
 
   return (
-    <div className="form-check d-flex justify-content-start align-items-center mb-4">
+    <div className="form-check d-flex justify-content-start align-items-center mb-4 mt-3">
       <label className="chkbx">
         <input
           type="checkbox"

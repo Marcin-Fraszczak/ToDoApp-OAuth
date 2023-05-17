@@ -2,8 +2,7 @@ import {useState} from "react"
 import {useNavigate} from "react-router-dom"
 import useLogout from "../../hooks/useLogout"
 import useAuth from "../../hooks/useAuth"
-import {faUserCheck} from "@fortawesome/free-solid-svg-icons"
-import {faUser} from "@fortawesome/free-regular-svg-icons"
+import {faHouse} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
@@ -35,11 +34,17 @@ const Navigation = () => {
     <>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top" style={navbarStyle}>
         <Container className="w-75">
-          <Navbar.Brand href="/">ToDoApp</Navbar.Brand>
+          <Navbar.Brand href="/">
+            <FontAwesomeIcon icon={faHouse}/>
+            <span className="ms-2">ToDoApp</span>
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="w-100 align-items-baseline justify-content-between">
-              <Button variant={buttonVariant} onClick={() => navigate("/chill")}>Chill</Button>
+              <div>
+                <Button variant={buttonVariant} onClick={() => navigate("/chill")}>Chill</Button>
+                <Button variant={buttonVariant} onClick={() => navigate("/vip")}>VIP</Button>
+              </div>
               <span className="text-white-50 mx-4">
 
                 <FloatingTooltip

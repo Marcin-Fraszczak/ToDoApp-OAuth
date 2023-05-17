@@ -15,7 +15,7 @@ import PasswordInput from "./AuthFormPartials/PaswordInput"
 import CheckBox from "./AuthFormPartials/Checkbox"
 import Divider from "./AuthFormPartials/Divider"
 import AlertElement from "../Partials/AlertElement"
-
+import ForgotLink from "./AuthFormPartials/ForgotLink"
 
 const AuthForm = () => {
   const [formType, setFormType] = useState(login)
@@ -27,7 +27,7 @@ const AuthForm = () => {
   const [infoMsg, setInfoMsg] = useState("")
 
   const usernameRef = useRef()
-  const {auth, setAuth, persist, setPersist} = useAuth()
+  const {setAuth, persist, setPersist} = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || "/"
@@ -57,14 +57,6 @@ const AuthForm = () => {
   useEffect(() => {
     localStorage.setItem("persist", persist)
   }, [persist])
-  //
-  // useEffect(() => {
-  //   !infoMsg && window.history.replaceState({}, document.title)
-  // }, [infoMsg])
-  //
-  // useEffect(() => {
-  //   !errMsg && window.history.replaceState({}, document.title)
-  // }, [errMsg])
 
   const resetForm = () => {
     setUsername("")
@@ -131,7 +123,7 @@ const AuthForm = () => {
           username={username}
           setUsername={setUsername}
           isValidUsername={isValidUsername}
-          usernameRef={usernameRef}
+          propsRef={usernameRef}
         />
         <PasswordInput
           password={password}
@@ -139,7 +131,12 @@ const AuthForm = () => {
           isValidPassword={isValidPassword}
           placeholder="password..."
         />
-        <CheckBox persist={persist} setPersist={setPersist}/>
+
+        <div className="d-flex justify-content-between align-items-baseline">
+          <CheckBox persist={persist} setPersist={setPersist}/>
+          <ForgotLink navigate={navigate}/>
+        </div>
+
         <button
           className={wideButtonClass("dark")}
           type="submit"

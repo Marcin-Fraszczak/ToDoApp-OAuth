@@ -16,8 +16,8 @@ const ChangePassForm = () => {
   const [isValidOldPassword, setIsValidOldPassword] = useState(false)
   const [password1, setPassword1] = useState("")
   const [isValidPassword1, setIsValidPassword1] = useState(false)
-  const [password2, setPassword2] = useState("")
-  const [isValidPassword2, setIsValidPassword2] = useState(false)
+  // const [password2, setPassword2] = useState("")
+  // const [isValidPassword2, setIsValidPassword2] = useState(false)
   const [errMsg, setErrMsg] = useState("")
 
   const oldPasswordRef = useRef()
@@ -27,7 +27,7 @@ const ChangePassForm = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    // oldPasswordRef.current.focus()
+    oldPasswordRef.current.focus()
   }, [])
 
   useEffect(() => {
@@ -38,17 +38,17 @@ const ChangePassForm = () => {
     setIsValidPassword1((isStrongPassword(password1)))
   }, [password1])
 
-  useEffect(() => {
-    setIsValidPassword2((isStrongPassword(password2)))
-  }, [password2])
+  // useEffect(() => {
+  //   setIsValidPassword2((isStrongPassword(password2)))
+  // }, [password2])
 
   const resetForm = () => {
     setOldPassword("")
     setPassword1("")
-    setPassword2("")
+    // setPassword2("")
     setIsValidOldPassword(false)
     setIsValidPassword1(false)
-    setIsValidPassword2(false)
+    // setIsValidPassword2(false)
     setErrMsg("")
   }
 
@@ -57,15 +57,15 @@ const ChangePassForm = () => {
     let errors = ""
     if (!isStrongPassword(oldPassword)) errors += "$#Current password does not match criteria"
     if (!isStrongPassword(password1)) errors += "$#New password (line 1) does not match criteria"
-    if (!isStrongPassword(password2)) errors += "$#New password (line 2) does not match criteria"
-    if (password1 !== password2) errors += "$#Passwords don't match"
+    // if (!isStrongPassword(password2)) errors += "$#New password (line 2) does not match criteria"
+    // if (password1 !== password2) errors += "$#Passwords don't match"
 
     if (errors.length > 0) setErrMsg(errors)
     else changePassword({
       "username": auth?.username,
       "password": oldPassword,
       password1,
-      password2,
+      // password2,
     })
   }
 
@@ -75,7 +75,8 @@ const ChangePassForm = () => {
       if (response.status === 200) {
         resetForm()
         setAuth({})
-        navigate("/auth", {state: {"infoMsg": "Successfully changed password.$# Log in with new credentials."}})
+        navigate("/auth", {replace: true,
+          state: {"infoMsg": "Successfully changed password.$# Please log in with new credentials."}})
       } else setErrMsg("Error while changing password")
     } catch (err) {
       handleAxiosErrors(err, setErrMsg)
@@ -89,35 +90,38 @@ const ChangePassForm = () => {
       <Navigation/>
       <FormBody>
 
-        <form onSubmit={handleSubmit} noValidate={true}>
+        <form onSubmit={handleSubmit} noValidate={true} className="text-white-50 text-lg-start">
+          <label htmlFor="old-password-input">Current password:</label>
           <PasswordInput
             password={oldPassword}
             setPassword={setOldPassword}
             isValidPassword={isValidOldPassword}
             placeholder="Current password..."
-            passwordRef={oldPasswordRef}
+            propsRef={oldPasswordRef}
+            id="old-password-input"
           />
 
           <Divider centerText=""/>
-          <div className="mb-5"></div>
-
+          <div className="mb-3"></div>
+          <label htmlFor="new-password-input">New password:</label>
           <PasswordInput
             password={password1}
             setPassword={setPassword1}
             isValidPassword={isValidPassword1}
             placeholder="New password..."
+            id="new-password-input"
           />
-          <PasswordInput
-            password={password2}
-            setPassword={setPassword2}
-            isValidPassword={isValidPassword2}
-            placeholder="Repeat new password..."
-          />
+          {/*<PasswordInput*/}
+          {/*  password={password2}*/}
+          {/*  setPassword={setPassword2}*/}
+          {/*  isValidPassword={isValidPassword2}*/}
+          {/*  placeholder="Repeat new password..."*/}
+          {/*/>*/}
 
           <button
             className={wideButtonClass("dark")}
             type="submit"
-            disabled={!(isValidOldPassword && isValidPassword1 && isValidPassword2)}
+            disabled={!(isValidOldPassword && isValidPassword1 /*&& isValidPassword2*/)}
           >Change password
           </button>
         </form>

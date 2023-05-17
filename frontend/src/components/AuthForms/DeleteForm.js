@@ -44,8 +44,8 @@ const DeleteForm = (props) => {
   return (
     <>
       <FormBody>
-        <h2 className="text-white">{`Please, type in your username`}</h2>
-        <h2 className="text-white">{`to confirm account deletion:`}</h2>
+        <h3 className="text-white">{`Please, type in your username`}</h3>
+        <h3 className="text-white">{`to confirm account deletion:`}</h3>
         <h3 className="my-4">{auth.username}</h3>
 
         <form noValidate={true} onSubmit={handleSubmit}>
@@ -54,7 +54,7 @@ const DeleteForm = (props) => {
               username={username}
               setUsername={setUsername}
               isValidUsername={isValidUsername}
-              usernameRef={usernameRef}
+              propsRef={usernameRef}
             />
           </div>
           <div className="mt-4 d-flex justify-content-around">
