@@ -18,17 +18,18 @@ const Missing = () => {
   }, [])
 
   return (
-    <div className={`missing ${show && 'show'}`}>
-      <FormBody>
-        <img src="/404.jpg" alt="404 Not Found" style={{width: "100%"}}/>
-        <div className={buttonGroupStyle}>
-          <Link to="/" className={buttonStyle}>Homepage</Link>
-          <Link to="/chill" className={buttonStyle}>Just Chill</Link>
-        </div>
-        <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg}/>
-      </FormBody>
-    </div>
-
+    <>
+      <div className={`missing ${show && 'show'}`}>
+        <FormBody>
+          <img src="/404.jpg" alt="404 Not Found" style={{width: "100%"}}/>
+          <div className={buttonGroupStyle}>
+            <Link to="/" className={buttonStyle}>Homepage</Link>
+            <Link to="/chill" className={buttonStyle}>Just Chill</Link>
+          </div>
+        </FormBody>
+      </div>
+      <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg} fullScreen={true}/>
+    </>
   )
 }
 

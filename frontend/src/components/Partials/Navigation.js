@@ -1,7 +1,9 @@
-import {useState} from "react"
+import React, {useState} from "react"
 import {useNavigate} from "react-router-dom"
 import useLogout from "../../hooks/useLogout"
 import useAuth from "../../hooks/useAuth"
+import useAxiosPrivate from "../../hooks/useAxiosPrivate"
+import {handleAxiosErrors} from "../../api/axios"
 import {faHouse} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import Container from 'react-bootstrap/Container'
@@ -12,16 +14,31 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 import Timer from "./Timer"
 import DeleteForm from "../AuthForms/DeleteForm"
 import FloatingTooltip from "./FloatingTooltip"
+import AlertElement from "./AlertElement"
 
 const Navigation = () => {
   const [showDelForm, setShowDelForm] = useState(false)
+  const [errMsg, setErrMsg] = useState("")
+  const [infoMsg, setInfoMsg] = useState("")
   const logout = useLogout()
   const navigate = useNavigate()
   const {auth} = useAuth()
+  const axiosPrivate = useAxiosPrivate()
 
   const logoutUser = async () => {
     await logout()
     navigate('/auth', {state: {"infoMsg": "Successfully logged out."}})
+  }
+
+  const verifyAccount = async () => {
+    try {
+      const response = await axiosPrivate.post("/users/verify",
+        JSON.stringify({"send": "aa"}))
+      if (response.status === 200) setInfoMsg(`Verification email has been sent to ${auth.username}`)
+      else setErrMsg("Error while sending verification email.")
+    } catch (err) {
+      handleAxiosErrors(err, setErrMsg)
+    }
   }
 
   const navbarStyle = {
@@ -55,6 +72,9 @@ const Navigation = () => {
               </span>
               <Timer/>
               <NavDropdown title="Account" menuVariant="dark" bg="dark">
+                {!auth?.verified &&
+                  <NavDropdown.Item onClick={verifyAccount}>Verify Account</NavDropdown.Item>
+                }
                 <NavDropdown.Item onClick={() => navigate("/change_password")}>Change Password</NavDropdown.Item>
                 <NavDropdown.Item onClick={() => setShowDelForm(true)}>Delete Account</NavDropdown.Item>
               </NavDropdown>
@@ -64,6 +84,8 @@ const Navigation = () => {
         </Container>
       </Navbar>
       {showDelForm && <DeleteForm setShowDelForm={setShowDelForm}/>}
+      <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg} fullScreen={true}/>
+      <AlertElement showAlert={infoMsg.length > 0} text={infoMsg} setText={setInfoMsg} info={true} fullScreen={true}/>
     </>
   )
 }

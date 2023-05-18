@@ -16,8 +16,16 @@ const DeleteForm = (props) => {
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
 
+  const handleEsc = (e) => {
+    if (e.key === 'Escape' && document.activeElement === usernameRef.current) {
+      props.setShowDelForm(false)
+    }
+  }
+
   useEffect(() => {
     usernameRef.current.focus()
+    window.addEventListener('keydown', handleEsc)
+    return () => window.removeEventListener('keydown', handleEsc)
   }, [])
 
   useEffect(() => {

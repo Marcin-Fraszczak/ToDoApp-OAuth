@@ -26,6 +26,15 @@ async def register_user(*, user: User, background_tasks: BackgroundTasks):
 	return new_user
 
 
+@users.post("/verify")
+async def send_verification_email(*, background_tasks: BackgroundTasks,
+								  user: Annotated[UserInDB, Depends(uf.get_current_user)]):
+	if user.verified:
+		raise exc.already_verified
+	await send_in_background(background_tasks, Email(email=[user.username, ]), email_type="verification")
+	return {"username": user.username}
+
+
 @users.get("/verify")
 async def verify_account(token: str | None = None):
 	user = await uf.get_current_user(token)
@@ -43,7 +52,6 @@ async def verify_account(token: str | None = None):
 async def login_for_access_token(*, response: Response,
 								 form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
 	user = await uf.authenticate_user(users_db, form_data.username, form_data.password)
-	print(user)
 	if not user:
 		raise exc.invalid_credentials
 
@@ -51,9 +59,7 @@ async def login_for_access_token(*, response: Response,
 	refresh_token = uf.create_token(user.username, expires_delta=int(REFRESH_TOKEN_EXPIRES), verified=user.verified)
 
 	users_db.update_one({"username": user.username}, {"$set": {"refresh_token": refresh_token}})
-	response.set_cookie(key="refresh_token", value=refresh_token, httponly=True)
-	# TODO: uncomment this line when working with React frontend
-	# response.set_cookie(key="refresh_token", value=refresh_token, httponly=True, secure=True, samesite='none')
+	response.set_cookie(key="refresh_token", value=refresh_token, httponly=True, secure=True, samesite='none')
 
 	return {"access_token": access_token, "token_type": "bearer"}
 
@@ -82,10 +88,9 @@ async def logout_user(*, response: Response, request: Request):
 
 @users.post("/password_reset", status_code=202)
 async def reset_users_password(*, user: BaseUser, background_tasks: BackgroundTasks):
-	email = uf.validate_email_address(user.username)
-	user_in_db = await uf.get_user(users_db, email)
+	user_in_db = await uf.get_user(users_db, user.username)
 	if user_in_db:
-		await send_in_background(background_tasks, Email(email=[email, ]), email_type="reset")
+		await send_in_background(background_tasks, Email(email=[user.username, ]), email_type="reset")
 	return {"sent"}
 
 
@@ -103,19 +108,17 @@ async def set_new_users_password(*, token: str | None = None, password: Annotate
 
 
 @users.put("/me")
-async def change_password(*, user: Annotated[UserInDB, Depends(uf.get_current_user)],
-						  request: Request, response: Response):
-	body = await request.json()
-	if not uf.verify_password(body.get("password"), user.hashed_password):
+async def change_password(*, user: Annotated[UserInDB, Depends(uf.get_current_user)], response: Response,
+						  password: Annotated[str, Body()], password1: Annotated[str, Body()]):
+	if not uf.verify_password(password, user.hashed_password):
 		raise exc.wrong_password
-	new_pass = body.get("password1")
-	if not new_pass:
+	if not password1:
 		raise exc.passwords_dont_match
 	try:
 		updated = users_db.update_one({"username": user.username},
 									  {"$set":
 										  {
-											  "hashed_password": uf.get_password_hash(new_pass),
+											  "hashed_password": uf.get_password_hash(password1),
 											  "refresh_token": ""
 										  }
 									  })
@@ -134,10 +137,3 @@ async def delete_user(*, user: Annotated[UserInDB, Depends(uf.get_current_user)]
 	users_db.delete_one({"username": user.username})
 	response.delete_cookie("refresh_token")
 	return {"username": user.username}
-
-# from fastapi.responses import JSONResponse
-#
-#
-# @users.post("/emailbackground")
-# async def send_in_bg(background_tasks: BackgroundTasks, email: Email) -> JSONResponse:
-# 	return await send_in_background(background_tasks, email)

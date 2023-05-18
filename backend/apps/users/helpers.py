@@ -7,7 +7,6 @@ from fastapi.security import OAuth2PasswordBearer
 from typing import Annotated
 from pymongo.errors import OperationFailure, ServerSelectionTimeoutError
 from pydantic import EmailStr
-from email_validator import validate_email, EmailNotValidError
 
 from .models import BaseUser, UserInDB
 from ..common import HTTP_exceptions as exc
@@ -45,7 +44,6 @@ async def get_user(db, username: str):
 
 
 async def authenticate_user(db, username: str, password: str):
-	username = validate_email_address(username)
 	user = await get_user(db, username)
 	if not user:
 		return False
@@ -75,7 +73,6 @@ async def get_current_active_user(current_user: Annotated[UserInDB, Depends(get_
 
 
 async def add_user_to_db(db, user) -> BaseUser:
-	user.username = validate_email_address(user.username)
 	exists = await get_user(db, user.username)
 	if exists:
 		raise exc.already_exists
@@ -93,33 +90,12 @@ async def add_user_to_db(db, user) -> BaseUser:
 		raise exc.database_error
 
 
-def validate_email_address(address):
-	# try:
-	# 	print(address)
-	# 	clean_address = validate_email(address, check_deliverability=False)
-	# 	print(clean_address)
-	# 	return clean_address.normalized
-	# except (EmailNotValidError, AttributeError) as e:
-	# 	print(e)
-	# 	raise exc.invalid_email
-	return address
-
-
 def delete_all_users_todos(username):
 	if not username:
 		raise exc.not_found
 	try:
 		opers = operations_db.delete_many({"owner": username})
 		tasks = tasks_db.delete_many({"owner": username})
-		return {"tasks": tasks.deleted_count, "operations": opers.deleted_count}
+		return {"del_tasks": tasks.deleted_count, "del_operations": opers.deleted_count}
 	except (OperationFailure, ServerSelectionTimeoutError):
 		raise exc.database_error
-
-# async def get_current_user_from_header(request: Request):
-# 	access_token_string = request.headers.get("Authorization")
-# 	if not access_token_string:
-# 		raise exc.invalid_credentials
-# 	access_token = access_token_string.split()[1]
-# 	if not access_token:
-# 		raise exc.invalid_credentials
-# 	return await get_current_user(access_token)

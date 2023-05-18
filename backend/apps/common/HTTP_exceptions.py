@@ -26,6 +26,11 @@ inactive_user = HTTPException(
 	detail={"msg": "Inactive user"}
 )
 
+already_verified = HTTPException(
+	status_code=status.HTTP_400_BAD_REQUEST,
+	detail={"msg": "User already verified"}
+)
+
 inactive_token = HTTPException(
 	status_code=status.HTTP_400_BAD_REQUEST,
 	detail={"msg": "Inactive token"}

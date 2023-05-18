@@ -21,13 +21,23 @@ const ChangePassForm = () => {
   const [errMsg, setErrMsg] = useState("")
 
   const oldPasswordRef = useRef()
+  const password1Ref = useRef()
   const {auth, setAuth} = useAuth()
   const axiosPrivate = useAxiosPrivate()
 
   const navigate = useNavigate()
 
+  const handleEsc = (e) => {
+    if (e.key === 'Escape' &&
+      (document.activeElement === oldPasswordRef.current || document.activeElement === password1Ref.current)) {
+      navigate(-1)
+    }
+  }
+
   useEffect(() => {
     oldPasswordRef.current.focus()
+    window.addEventListener('keydown', handleEsc)
+    return () => window.removeEventListener('keydown', handleEsc)
   }, [])
 
   useEffect(() => {
@@ -75,8 +85,10 @@ const ChangePassForm = () => {
       if (response.status === 200) {
         resetForm()
         setAuth({})
-        navigate("/auth", {replace: true,
-          state: {"infoMsg": "Successfully changed password.$# Please log in with new credentials."}})
+        navigate("/auth", {
+          replace: true,
+          state: {"infoMsg": "Successfully changed password.$# Please log in with new credentials."}
+        })
       } else setErrMsg("Error while changing password")
     } catch (err) {
       handleAxiosErrors(err, setErrMsg)
@@ -109,6 +121,7 @@ const ChangePassForm = () => {
             setPassword={setPassword1}
             isValidPassword={isValidPassword1}
             placeholder="New password..."
+            propsRef={password1Ref}
             id="new-password-input"
           />
           {/*<PasswordInput*/}
