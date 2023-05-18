@@ -1,6 +1,6 @@
 const Divider = (props) => {
   const lineStyle = {flex: 1, height: '1px', backgroundColor: 'lightgrey'}
-  const textStyle = {width: `${props.centerText ? '3rem' : ''}`, textAlign: 'center'}
+  const textStyle = {width: `${props.centerText ? '12rem' : ''}`, textAlign: 'center'}
 
   return (
     <div className="d-flex align-items-baseline mt-3 mb-1 text-white-50">

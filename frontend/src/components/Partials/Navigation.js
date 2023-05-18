@@ -12,12 +12,10 @@ import Nav from 'react-bootstrap/Nav'
 import Button from 'react-bootstrap/Button'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import Timer from "./Timer"
-import DeleteForm from "../AuthForms/DeleteForm"
 import FloatingTooltip from "./FloatingTooltip"
 import AlertElement from "./AlertElement"
 
 const Navigation = () => {
-  const [showDelForm, setShowDelForm] = useState(false)
   const [errMsg, setErrMsg] = useState("")
   const [infoMsg, setInfoMsg] = useState("")
   const logout = useLogout()
@@ -76,14 +74,14 @@ const Navigation = () => {
                   <NavDropdown.Item onClick={verifyAccount}>Verify Account</NavDropdown.Item>
                 }
                 <NavDropdown.Item onClick={() => navigate("/change_password")}>Change Password</NavDropdown.Item>
-                <NavDropdown.Item onClick={() => setShowDelForm(true)}>Delete Account</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => navigate("/delete_account")}>Delete Account</NavDropdown.Item>
               </NavDropdown>
               <Button variant={buttonVariant} onClick={logoutUser}>Log out</Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      {showDelForm && <DeleteForm setShowDelForm={setShowDelForm}/>}
+
       <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg} fullScreen={true}/>
       <AlertElement showAlert={infoMsg.length > 0} text={infoMsg} setText={setInfoMsg} info={true} fullScreen={true}/>
     </>

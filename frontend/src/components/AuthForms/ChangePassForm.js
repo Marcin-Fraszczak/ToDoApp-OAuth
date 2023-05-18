@@ -24,15 +24,9 @@ const ChangePassForm = () => {
   const password1Ref = useRef()
   const {auth, setAuth} = useAuth()
   const axiosPrivate = useAxiosPrivate()
-
   const navigate = useNavigate()
 
-  const handleEsc = (e) => {
-    if (e.key === 'Escape' &&
-      (document.activeElement === oldPasswordRef.current || document.activeElement === password1Ref.current)) {
-      navigate(-1)
-    }
-  }
+  const handleEsc = (e) => e.key === 'Escape' && navigate(-1)
 
   useEffect(() => {
     oldPasswordRef.current.focus()

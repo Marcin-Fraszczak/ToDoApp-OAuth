@@ -14,6 +14,7 @@ import ResetPassForm from "./components/AuthForms/ResetPassForm"
 import VerifyForm from "./components/AuthForms/VerifyForm"
 import NewPassForm from "./components/AuthForms/NewPassForm"
 import VipZone from "./components/Vip/VipZone"
+import DeleteForm from "./components/AuthForms/DeleteForm"
 
 const App = () => {
 
@@ -34,6 +35,7 @@ const App = () => {
           <Route element={<RequireAuth/>}>
             <Route path="/" element={<Home/>}/>
             <Route path="change_password" element={<ChangePassForm/>}/>
+            <Route path="delete_account" element={<DeleteForm/>}/>
             <Route path="vip" element={<VipZone/>}/>
           </Route>
         </Route>

@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from "react"
 import {useLocation, useNavigate} from "react-router-dom"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faGoogle} from "@fortawesome/free-brands-svg-icons"
+import {faGoogle, faFacebookSquare, faGithub, faGithubSquare} from "@fortawesome/free-brands-svg-icons"
 import isEmail from "validator/es/lib/isEmail"
 import isStrongPassword from "validator/es/lib/isStrongPassword"
 import normalizeEmail from "validator/es/lib/normalizeEmail"
@@ -144,12 +144,25 @@ const AuthForm = () => {
         >{formType}</button>
       </form>
 
-      <Divider centerText="OR"/>
+      <Divider centerText="OR CONTINUE WITH:"/>
 
-      <button className={wideButtonClass("dark")} style={{opacity: "0.8"}}>
-        <FontAwesomeIcon icon={faGoogle} className="me-3" size="xl"/>
-        Continue with google
-      </button>
+      {/*<button className={wideButtonClass("dark")} style={{opacity: "0.8"}}>*/}
+      {/*  <FontAwesomeIcon icon={faGoogle} className="me-3" size="xl"/>*/}
+      {/*  Continue with google*/}
+      {/*</button>*/}
+
+      <div>
+        <button className="btn mx-1">
+          <FontAwesomeIcon icon={faGoogle} className="mx-3" size="2xl" style={{color: "#21302b"}}/>
+        </button>
+        <button className="btn mx-1">
+          <FontAwesomeIcon icon={faFacebookSquare} className="mx-3" size="2xl" style={{color: "#21302b"}}/>
+        </button>
+        <button className="btn mx-1">
+          <FontAwesomeIcon icon={faGithub} className="mx-3" size="2xl" style={{color: "#21302b"}}/>
+        </button>
+      </div>
+      <span style={{color: "#21302b"}}>(3rd party authentication is still in development...)</span>
 
       <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg}/>
       <AlertElement showAlert={infoMsg.length > 0} text={infoMsg} setText={setInfoMsg} info={true}/>

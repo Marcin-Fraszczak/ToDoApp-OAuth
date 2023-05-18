@@ -7,13 +7,19 @@ const ChillOut = () => {
   const [show, setShow] = useState(false)
   const navigate = useNavigate()
 
+  const handleEsc = (e) => {
+    if (e.key === 'Escape') navigate("/")
+  }
+
   useEffect(() => {
     const intervalId = setInterval(getTime, 1000)
     const timeoutId = setTimeout(() => setShow(true), 800)
+    window.addEventListener('keydown', handleEsc)
 
     return () => {
       clearInterval(intervalId)
       clearTimeout(timeoutId)
+      window.removeEventListener('keydown', handleEsc)
     }
   }, [])
 
@@ -36,11 +42,11 @@ const ChillOut = () => {
   return (
     <div className="d-flex">
       <div className="text-white text-center" style={clockStyle}>
-          <div className={`clock ${show && 'show'}`}>
-            <div>{date}</div>
-            <div>{time}</div>
-            <button className="btn btn-sm btn-outline-secondary" onClick={() => navigate("/")}>Back To Work</button>
-          </div>
+        <div className={`clock ${show && 'show'}`}>
+          <div>{date}</div>
+          <div>{time}</div>
+          <button className="btn btn-sm btn-outline-secondary" onClick={() => navigate("/")}>Back To Work</button>
+        </div>
       </div>
     </div>
   )

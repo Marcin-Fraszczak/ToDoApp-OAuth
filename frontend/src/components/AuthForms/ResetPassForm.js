@@ -14,8 +14,12 @@ const ResetPassForm = () => {
   const usernameRef = useRef()
   const navigate = useNavigate()
 
+  const handleEsc = (e) => e.key === 'Escape' && navigate(-2)
+
   useEffect(() => {
     !success && usernameRef.current.focus()
+    window.addEventListener('keydown', handleEsc)
+    return () => window.removeEventListener('keydown', handleEsc)
   }, [])
 
   useEffect(() => {

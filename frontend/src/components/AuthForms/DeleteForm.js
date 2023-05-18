@@ -6,6 +6,7 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate"
 import FormBody from "./AuthFormPartials/FormBody"
 import UsernameInput from "./AuthFormPartials/UsernameInput"
 import AlertElement from "../Partials/AlertElement"
+import Navigation from "../Partials/Navigation";
 
 const DeleteForm = (props) => {
   const [username, setUsername] = useState("")
@@ -16,11 +17,7 @@ const DeleteForm = (props) => {
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
 
-  const handleEsc = (e) => {
-    if (e.key === 'Escape' && document.activeElement === usernameRef.current) {
-      props.setShowDelForm(false)
-    }
-  }
+  const handleEsc = (e) => e.key === 'Escape' && navigate(-1)
 
   useEffect(() => {
     usernameRef.current.focus()
@@ -51,6 +48,7 @@ const DeleteForm = (props) => {
 
   return (
     <>
+      <Navigation/>
       <FormBody>
         <h3 className="text-white">{`Please, type in your username`}</h3>
         <h3 className="text-white">{`to confirm account deletion:`}</h3>
