@@ -14,14 +14,14 @@ const ResetPassForm = () => {
   const [success, setSuccess] = useState(false)
   const usernameRef = useRef()
   const navigate = useNavigate()
-  const handleEsc = useHandleEsc(-2)
+  const handleEsc = useHandleEsc("/")
 
   useEffect(() => {
     !success && usernameRef.current.focus()
     window.addEventListener('keydown', handleEsc)
 
     return () => window.removeEventListener('keydown', handleEsc)
-  }, [])
+  }, [handleEsc, success])
 
   useEffect(() => {
     setIsValidUsername(isEmail(username))

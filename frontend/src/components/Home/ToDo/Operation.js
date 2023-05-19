@@ -34,6 +34,7 @@ const Operation = (props) => {
     window.addEventListener('keydown', handleEsc)
 
     return () => window.removeEventListener('keydown', handleEsc)
+    // eslint-disable-next-line
   }, [])
 
   useEffect(() => {

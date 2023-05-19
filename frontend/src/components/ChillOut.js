@@ -19,6 +19,7 @@ const ChillOut = () => {
       clearTimeout(timeoutId)
       window.removeEventListener('keydown', handleEsc)
     }
+    // eslint-disable-next-line
   }, [])
 
   const getTime = () => {

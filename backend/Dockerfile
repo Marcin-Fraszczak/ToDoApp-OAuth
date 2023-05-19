@@ -1,12 +1,12 @@
 FROM python:3.11-alpine3.18
 
-WORKDIR /code
+WORKDIR /backend
 
-COPY ./requirements.txt /code/requirements.txt
+COPY ./requirements.txt ./requirements.txt
 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
-RUN pip install --upgrade --force-reinstall email-validator==2.0.0
+RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
+RUN pip install --upgrade --force-reinstall email-validator==2.0.0.post2
 
-COPY . /code/backend
+COPY . ./
 
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

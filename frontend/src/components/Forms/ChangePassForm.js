@@ -22,14 +22,14 @@ const ChangePassForm = () => {
   const {auth, setAuth} = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
-  const handleEsc = useHandleEsc(-1)
+  const handleEsc = useHandleEsc("/")
 
   useEffect(() => {
     oldPasswordRef.current.focus()
     window.addEventListener('keydown', handleEsc)
 
     return () => window.removeEventListener('keydown', handleEsc)
-  }, [])
+  }, [handleEsc])
 
   useEffect(() => {
     setIsValidOldPassword((isStrongPassword(oldPassword)))

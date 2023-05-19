@@ -5,14 +5,15 @@ const ForgotLink = (props) => {
   const [clicked, setClicked] = useState(false)
 
   return (
-    <a style={{textDecoration: hovered ? "underline" : "none", color: clicked ? "#363d3b" : "#9da3a1"}}
-      className="me-5" href="#"
+    <span style={{textDecoration: hovered ? "underline" : "none",
+      color: clicked ? "#363d3b" : "#9da3a1", cursor: "pointer"}}
+      className="me-5"
        onClick={() => props.navigate("/reset_password")}
        onMouseEnter={() => setHovered(true)}
        onMouseLeave={() => setHovered(false)}
        onMouseDown={() => setClicked(true)}
        onMouseUp={() => setClicked(false)}
-    >Forgot password?</a>
+    >Forgot password?</span>
   )
 }
 

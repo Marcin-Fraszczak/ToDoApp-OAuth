@@ -17,7 +17,7 @@ const VerifyForm = () => {
     if (tokenString.length > 0) {
       setToken(tokenString)
     } else setErrMsg("Invalid verification token")
-  }, [])
+  }, [location.search])
 
   const verifyUser = async (e) => {
     e.preventDefault()
