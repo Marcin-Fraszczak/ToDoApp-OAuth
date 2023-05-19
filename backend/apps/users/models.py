@@ -11,10 +11,10 @@ class Token(BaseModel):
 class BaseUser(BaseModel):
 	username: EmailStr
 
-	@validator('username', always=True)
-	def validate_email(cls, value):
-		clean_address = validate_email(value, check_deliverability=False)
-		return clean_address.normalized
+	# @validator('username', always=True)
+	# def validate_email(cls, value):
+	# 	clean_address = validate_email(value, check_deliverability=False)
+	# 	return clean_address.normalized
 
 
 class User(BaseUser):
