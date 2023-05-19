@@ -2,9 +2,9 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-import docs
-from apps.users.users import users
-from apps.todos.todos import todos
+from . import docs
+from .apps.users.users import users
+from .apps.todos.todos import todos
 
 app = FastAPI(
 	title="ToDoApp - OAuth",
@@ -32,3 +32,4 @@ app.add_middleware(
 if __name__ == "__main__":
 	load_dotenv('.env')
 	uvicorn.run("main:app", port=8000, reload=True)
+	# uvicorn.run("main:app")

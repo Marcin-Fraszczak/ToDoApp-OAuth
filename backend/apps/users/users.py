@@ -1,5 +1,6 @@
 from os import getenv
 from typing import Annotated
+from email_validator import validate_email
 from fastapi import Depends, APIRouter, Response, Request, BackgroundTasks, Body
 from fastapi.security import OAuth2PasswordRequestForm
 from pymongo.errors import OperationFailure, ServerSelectionTimeoutError
@@ -51,7 +52,8 @@ async def verify_account(token: str | None = None):
 @users.post("/token", response_model=Token)
 async def login_for_access_token(*, response: Response,
 								 form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
-	user = await uf.authenticate_user(users_db, form_data.username, form_data.password)
+	email = validate_email(form_data.username, check_deliverability=False).normalized
+	user = await uf.authenticate_user(users_db, email, form_data.password)
 	if not user:
 		raise exc.invalid_credentials
 
