@@ -4,26 +4,23 @@ import {faCirclePlus, faEraser} from "@fortawesome/free-solid-svg-icons"
 import {handleAxiosErrors} from "../../../api/axios"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 import useTextValidator from "../../../hooks/useTextValidator"
-
 import CardBody from "./ToDoPartials/CardBody"
 import TitleInput from "./ToDoPartials/TitleInput"
 import DescriptionInput from "./ToDoPartials/DescriptionInput"
 import AlertElement from "../../Partials/AlertElement"
-
 
 const NewTask = (props) => {
   const [title, setTitle] = useState("")
   const [isValidTitle, setIsValidTitle] = useState(false)
   const [description, setDescription] = useState("")
   const [errMsg, setErrMsg] = useState("")
-
   const titleRef = useRef()
   const descRef = useRef()
   const axiosPrivate = useAxiosPrivate()
   const textValidator = useTextValidator()
 
-  const handleEsc = (e) => {
-    if (e.key === 'Escape' && (document.activeElement === titleRef.current || document.activeElement === descRef.current)) {
+  const handleEsc = e => {
+    if (e.key === 'Escape' && ([titleRef.current, descRef.current].includes(document.activeElement))) {
       resetForm()
       props.setShowForm(false)
     }
@@ -32,6 +29,7 @@ const NewTask = (props) => {
   useEffect(() => {
     props.showForm && titleRef.current.focus()
     window.addEventListener('keydown', handleEsc)
+
     return () => window.removeEventListener('keydown', handleEsc)
   }, [])
 

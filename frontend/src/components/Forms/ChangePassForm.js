@@ -4,33 +4,30 @@ import {handleAxiosErrors} from "../../api/axios"
 import useAxiosPrivate from "../../hooks/useAxiosPrivate"
 import {useNavigate} from "react-router-dom"
 import useAuth from "../../hooks/useAuth"
-import FormBody from "./AuthFormPartials/FormBody"
-import PasswordInput from "./AuthFormPartials/PaswordInput"
-import Divider from "./AuthFormPartials/Divider"
+import useHandleEsc from "../../hooks/useHandleEsc"
+import FormBody from "./FormsPartials/FormBody"
+import PasswordInput from "./FormsPartials/PaswordInput"
+import Divider from "./FormsPartials/Divider"
 import AlertElement from "../Partials/AlertElement"
 import Navigation from "../Partials/Navigation"
-
 
 const ChangePassForm = () => {
   const [oldPassword, setOldPassword] = useState("")
   const [isValidOldPassword, setIsValidOldPassword] = useState(false)
   const [password1, setPassword1] = useState("")
   const [isValidPassword1, setIsValidPassword1] = useState(false)
-  // const [password2, setPassword2] = useState("")
-  // const [isValidPassword2, setIsValidPassword2] = useState(false)
   const [errMsg, setErrMsg] = useState("")
-
   const oldPasswordRef = useRef()
   const password1Ref = useRef()
   const {auth, setAuth} = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
-
-  const handleEsc = (e) => e.key === 'Escape' && navigate(-1)
+  const handleEsc = useHandleEsc(-1)
 
   useEffect(() => {
     oldPasswordRef.current.focus()
     window.addEventListener('keydown', handleEsc)
+
     return () => window.removeEventListener('keydown', handleEsc)
   }, [])
 
@@ -42,17 +39,11 @@ const ChangePassForm = () => {
     setIsValidPassword1((isStrongPassword(password1)))
   }, [password1])
 
-  // useEffect(() => {
-  //   setIsValidPassword2((isStrongPassword(password2)))
-  // }, [password2])
-
   const resetForm = () => {
     setOldPassword("")
     setPassword1("")
-    // setPassword2("")
     setIsValidOldPassword(false)
     setIsValidPassword1(false)
-    // setIsValidPassword2(false)
     setErrMsg("")
   }
 
@@ -61,15 +52,12 @@ const ChangePassForm = () => {
     let errors = ""
     if (!isStrongPassword(oldPassword)) errors += "$#Current password does not match criteria"
     if (!isStrongPassword(password1)) errors += "$#New password (line 1) does not match criteria"
-    // if (!isStrongPassword(password2)) errors += "$#New password (line 2) does not match criteria"
-    // if (password1 !== password2) errors += "$#Passwords don't match"
 
     if (errors.length > 0) setErrMsg(errors)
     else changePassword({
       "username": auth?.username,
       "password": oldPassword,
       password1,
-      // password2,
     })
   }
 
@@ -118,17 +106,11 @@ const ChangePassForm = () => {
             propsRef={password1Ref}
             id="new-password-input"
           />
-          {/*<PasswordInput*/}
-          {/*  password={password2}*/}
-          {/*  setPassword={setPassword2}*/}
-          {/*  isValidPassword={isValidPassword2}*/}
-          {/*  placeholder="Repeat new password..."*/}
-          {/*/>*/}
 
           <button
             className={wideButtonClass("dark")}
             type="submit"
-            disabled={!(isValidOldPassword && isValidPassword1 /*&& isValidPassword2*/)}
+            disabled={!(isValidOldPassword && isValidPassword1)}
           >Change password
           </button>
         </form>

@@ -5,11 +5,12 @@ const AlertElement = (props) => {
   const [show, setShow] = useState(props.showAlert)
   const [alertText, setAlertText] = useState(props.text)
 
-  const handleEsc = (e) => e.key === 'Escape' && hideText()
+  const handleEsc = e => e.key === 'Escape' && hideText()
 
   useEffect(() => {
     const timeoutId = setTimeout(hideText, 10000)
     window.addEventListener('keydown', handleEsc)
+
     return () => {
       clearTimeout(timeoutId)
       window.removeEventListener('keydown', handleEsc)

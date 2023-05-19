@@ -1,15 +1,13 @@
 import {useEffect, useState} from "react"
 import {useNavigate} from "react-router-dom"
+import useHandleEsc from "../hooks/useHandleEsc"
 
 const ChillOut = () => {
   const [date, setDate] = useState("")
   const [time, setTime] = useState("")
   const [show, setShow] = useState(false)
   const navigate = useNavigate()
-
-  const handleEsc = (e) => {
-    if (e.key === 'Escape') navigate("/")
-  }
+  const handleEsc = useHandleEsc("/")
 
   useEffect(() => {
     const intervalId = setInterval(getTime, 1000)

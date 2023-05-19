@@ -8,7 +8,6 @@ const CardBody = (props) => {
   }
 
   return (
-
       <div className="container py-2">
         <div className="row d-flex justify-content-center">
           <div className="col-12 col-md-12 col-lg-11 col-xl-10">

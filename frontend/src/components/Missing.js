@@ -1,6 +1,7 @@
-import {Link, useLocation, useNavigate} from "react-router-dom"
-import FormBody from "./AuthForms/AuthFormPartials/FormBody"
 import React, {useEffect, useState} from "react"
+import {Link, useLocation} from "react-router-dom"
+import useHandleEsc from "../hooks/useHandleEsc"
+import FormBody from "./Forms/FormsPartials/FormBody"
 import AlertElement from "./Partials/AlertElement"
 
 const Missing = () => {
@@ -8,17 +9,14 @@ const Missing = () => {
   const [errMsg, setErrMsg] = useState("")
   const buttonGroupStyle = "mt-4 d-flex justify-content-around"
   const buttonStyle = "btn btn-outline-light"
-  const navigate = useNavigate()
   const location = useLocation()
-
-  const handleEsc = (e) => {
-    if (e.key === 'Escape') navigate(-1)
-  }
+  const handleEsc = useHandleEsc(-1)
 
   useEffect(() => {
     const timeoutId = setTimeout(() => setShow(true), 100)
     location?.state?.infoMsg && setErrMsg(location.state.infoMsg)
     window.addEventListener('keydown', handleEsc)
+
     return () => {
       clearTimeout(timeoutId)
       window.removeEventListener('keydown', handleEsc)

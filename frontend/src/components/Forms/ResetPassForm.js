@@ -1,9 +1,10 @@
 import React, {useState, useEffect, useRef} from "react"
 import {useNavigate} from "react-router-dom"
+import useHandleEsc from "../../hooks/useHandleEsc"
 import {axiosJson, handleAxiosErrors} from "../../api/axios"
 import isEmail from "validator/es/lib/isEmail"
-import FormBody from "./AuthFormPartials/FormBody"
-import UsernameInput from "./AuthFormPartials/UsernameInput"
+import FormBody from "./FormsPartials/FormBody"
+import UsernameInput from "./FormsPartials/UsernameInput"
 import AlertElement from "../Partials/AlertElement"
 
 const ResetPassForm = () => {
@@ -13,12 +14,12 @@ const ResetPassForm = () => {
   const [success, setSuccess] = useState(false)
   const usernameRef = useRef()
   const navigate = useNavigate()
-
-  const handleEsc = (e) => e.key === 'Escape' && navigate(-2)
+  const handleEsc = useHandleEsc(-2)
 
   useEffect(() => {
     !success && usernameRef.current.focus()
     window.addEventListener('keydown', handleEsc)
+
     return () => window.removeEventListener('keydown', handleEsc)
   }, [])
 
@@ -70,7 +71,6 @@ const ResetPassForm = () => {
         </FormBody>
       }
     </>
-
   )
 }
 

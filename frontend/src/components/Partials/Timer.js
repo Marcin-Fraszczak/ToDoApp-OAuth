@@ -8,7 +8,6 @@ const Timer = () => {
   const {auth} = useAuth()
   const decodeToken = useDecodeToken()
 
-
   useEffect(() => {
     const timeoutId = setTimeout(calculateTime, 1000)
     return () => clearTimeout(timeoutId)

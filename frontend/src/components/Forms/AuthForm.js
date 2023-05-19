@@ -1,21 +1,22 @@
 import React, {useState, useEffect, useRef} from "react"
 import {useLocation, useNavigate} from "react-router-dom"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faGoogle, faFacebookSquare, faGithub, faGithubSquare} from "@fortawesome/free-brands-svg-icons"
+import {faGoogle, faFacebookSquare, faGithub} from "@fortawesome/free-brands-svg-icons"
 import isEmail from "validator/es/lib/isEmail"
 import isStrongPassword from "validator/es/lib/isStrongPassword"
 import normalizeEmail from "validator/es/lib/normalizeEmail"
 import axios, {handleAxiosErrors, axiosJson} from "../../api/axios"
 import useAuth from "../../hooks/useAuth"
 import useDecodeToken from "../../hooks/useDecodeToken"
-import FormBody from "./AuthFormPartials/FormBody"
-import TopButtons, {login} from "./AuthFormPartials/TopButtons"
-import UsernameInput from "./AuthFormPartials/UsernameInput"
-import PasswordInput from "./AuthFormPartials/PaswordInput"
-import CheckBox from "./AuthFormPartials/Checkbox"
-import Divider from "./AuthFormPartials/Divider"
+import useWideButtonClass from "../../hooks/useWideButtonClass"
+import FormBody from "./FormsPartials/FormBody"
+import TopButtons, {login} from "./FormsPartials/TopButtons"
+import UsernameInput from "./FormsPartials/UsernameInput"
+import PasswordInput from "./FormsPartials/PaswordInput"
+import CheckBox from "./FormsPartials/Checkbox"
+import Divider from "./FormsPartials/Divider"
 import AlertElement from "../Partials/AlertElement"
-import ForgotLink from "./AuthFormPartials/ForgotLink"
+import ForgotLink from "./FormsPartials/ForgotLink"
+import ThirdPartyButton from "./FormsPartials/ThirdPartyButton"
 
 const AuthForm = () => {
   const [formType, setFormType] = useState(login)
@@ -25,13 +26,13 @@ const AuthForm = () => {
   const [isValidPassword, setIsValidPassword] = useState(false)
   const [errMsg, setErrMsg] = useState("")
   const [infoMsg, setInfoMsg] = useState("")
-
   const usernameRef = useRef()
   const {setAuth, persist, setPersist} = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || "/"
   const decodeToken = useDecodeToken()
+  const wideButtonClass = useWideButtonClass()
 
   useEffect(() => {
     usernameRef.current.focus()
@@ -112,8 +113,6 @@ const AuthForm = () => {
     } else setErrMsg("Invalid input")
   }
 
-  const wideButtonClass = (type) => `btn btn-${type} btn-lg w-100 shadow mt-1`
-
   return (
     <FormBody>
       <TopButtons formType={formType} setFormType={setFormType}/>
@@ -146,23 +145,12 @@ const AuthForm = () => {
 
       <Divider centerText="OR CONTINUE WITH:"/>
 
-      {/*<button className={wideButtonClass("dark")} style={{opacity: "0.8"}}>*/}
-      {/*  <FontAwesomeIcon icon={faGoogle} className="me-3" size="xl"/>*/}
-      {/*  Continue with google*/}
-      {/*</button>*/}
-
       <div>
-        <button className="btn mx-1">
-          <FontAwesomeIcon icon={faGoogle} className="mx-3" size="2xl" style={{color: "#21302b"}}/>
-        </button>
-        <button className="btn mx-1">
-          <FontAwesomeIcon icon={faFacebookSquare} className="mx-3" size="2xl" style={{color: "#21302b"}}/>
-        </button>
-        <button className="btn mx-1">
-          <FontAwesomeIcon icon={faGithub} className="mx-3" size="2xl" style={{color: "#21302b"}}/>
-        </button>
+        <ThirdPartyButton icon={faGoogle}/>
+        <ThirdPartyButton icon={faFacebookSquare}/>
+        <ThirdPartyButton icon={faGithub}/>
       </div>
-      <span style={{color: "#21302b"}}>(3rd party authentication is still in development...)</span>
+      <span className="color-tpb">(3rd party authentication is still in development...)</span>
 
       <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg}/>
       <AlertElement showAlert={infoMsg.length > 0} text={infoMsg} setText={setInfoMsg} info={true}/>

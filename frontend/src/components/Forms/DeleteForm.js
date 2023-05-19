@@ -2,13 +2,14 @@ import React, {useState, useEffect, useRef} from "react"
 import {handleAxiosErrors} from "../../api/axios"
 import {useNavigate} from "react-router-dom"
 import useAuth from "../../hooks/useAuth"
+import useHandleEsc from "../../hooks/useHandleEsc"
 import useAxiosPrivate from "../../hooks/useAxiosPrivate"
-import FormBody from "./AuthFormPartials/FormBody"
-import UsernameInput from "./AuthFormPartials/UsernameInput"
+import FormBody from "./FormsPartials/FormBody"
+import UsernameInput from "./FormsPartials/UsernameInput"
 import AlertElement from "../Partials/AlertElement"
-import Navigation from "../Partials/Navigation";
+import Navigation from "../Partials/Navigation"
 
-const DeleteForm = (props) => {
+const DeleteForm = () => {
   const [username, setUsername] = useState("")
   const [isValidUsername, setIsValidUsername] = useState(false)
   const [errMsg, setErrMsg] = useState("")
@@ -16,12 +17,12 @@ const DeleteForm = (props) => {
   const usernameRef = useRef()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
-
-  const handleEsc = (e) => e.key === 'Escape' && navigate(-1)
+  const handleEsc = useHandleEsc(-1)
 
   useEffect(() => {
     usernameRef.current.focus()
     window.addEventListener('keydown', handleEsc)
+
     return () => window.removeEventListener('keydown', handleEsc)
   }, [])
 
@@ -66,7 +67,7 @@ const DeleteForm = (props) => {
           <div className="mt-4 d-flex justify-content-around">
             <button className="btn btn-outline-danger" type="submit" disabled={!isValidUsername}>Delete</button>
             <button className="btn btn-outline-light" type="button"
-                    onClick={() => props.setShowDelForm(false)}>Cancel
+                    onClick={() => navigate(-1)}>Cancel
             </button>
           </div>
         </form>

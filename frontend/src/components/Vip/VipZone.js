@@ -1,18 +1,20 @@
 import React, {useState, useEffect} from "react"
 import {useNavigate} from "react-router-dom"
 import useAuth from "../../hooks/useAuth"
+import useHandleEsc from "../../hooks/useHandleEsc"
 import Navigation from "../Partials/Navigation"
-import FormBody from "../AuthForms/AuthFormPartials/FormBody"
-
+import FormBody from "../Forms/FormsPartials/FormBody"
 
 const VipZone = () => {
-
   const {auth} = useAuth()
   const navigate = useNavigate()
-
+  const handleEsc = useHandleEsc(-1)
 
   useEffect(() => {
     !auth?.verified && navigate("/missing", {replace: true, state: {"infoMsg": "Only for verified accounts."}})
+    window.addEventListener('keydown', handleEsc)
+
+    return () => window.removeEventListener('keydown', handleEsc)
   }, [])
 
   return (

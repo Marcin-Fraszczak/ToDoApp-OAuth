@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react"
 import axios, {handleAxiosErrors} from "../../api/axios"
 import {Link, useLocation, useNavigate} from "react-router-dom"
 import useDecodeToken from "../../hooks/useDecodeToken"
-import FormBody from "./AuthFormPartials/FormBody"
+import FormBody from "./FormsPartials/FormBody"
 
 const VerifyForm = () => {
   const [token, setToken] = useState("")

@@ -1,7 +1,7 @@
 import React from "react"
-import TooltipElement from "../../../AuthForms/AuthFormPartials/InputTooltip"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faCirclePlus} from "@fortawesome/free-solid-svg-icons"
+import TooltipElement from "../../../Forms/FormsPartials/InputTooltip"
 
 const TitleInput = (props) => {
 

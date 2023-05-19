@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faArchive, faBoxOpen, faClock, faTrash} from "@fortawesome/free-solid-svg-icons"
 import {handleAxiosErrors} from "../../../api/axios"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
-
+import useButtonClass from "../../../hooks/useButtonClass"
 import NumberInput from "./ToDoPartials/NumberInput"
 import AlertElement from "../../Partials/AlertElement"
 
@@ -15,11 +15,11 @@ const Operation = (props) => {
   const [isValidTime, setIsValidTime] = useState(false)
   const [operation, setOperation] = useState(props.operation)
   const [showDelForm, setShowDelForm] = useState(false)
-
   const axiosPrivate = useAxiosPrivate()
   const timeRef = useRef()
+  const buttonClass = useButtonClass()
 
-  const handleEsc = (e) => {
+  const handleEsc = e => {
     if (e.key === 'Escape' && document.activeElement === timeRef.current) {
       hideTimeForm()
       setShowForm(false)
@@ -27,14 +27,15 @@ const Operation = (props) => {
   }
 
   useEffect(() => {
-    time && setIsValidTime(isInt(time))
-  }, [time])
-
-  useEffect(() => {
     hideTimeForm()
     window.addEventListener('keydown', handleEsc)
+
     return () => window.removeEventListener('keydown', handleEsc)
   }, [])
+
+  useEffect(() => {
+    time && setIsValidTime(isInt(time))
+  }, [time])
 
   useEffect(() => {
     showForm && timeRef.current.focus()
@@ -43,7 +44,6 @@ const Operation = (props) => {
   useEffect(() => {
     props.taskFinished && hideTimeForm()
   }, [props.taskFinished])
-
 
   const displayTime = value => {
     value = Math.abs(value)
@@ -96,17 +96,15 @@ const Operation = (props) => {
     }
   }
 
-  const buttonClass = (type) => `btn btn-sm btn-${type} shadow mx-2`
-
   return (
     <li className="list-group-item d-flex justify-content-between align-items-center bg-transparent text-white-50">
-      <div style={{textDecoration: operation.finished ? "line-through" : "none"}}>
+      <div className={operation.finished ? "text-white-50" : "text-white"}
+           style={{textDecoration: operation.finished ? "line-through" : "none"}}>
         {operation.title}
         <span className="badge rounded-pill bg-success ms-3">
           {displayTime(operation.time)}
         </span>
       </div>
-
 
       {showForm && !props.taskFinished && !operation.finished &&
         <form onSubmit={addTime} noValidate={true}>
@@ -122,9 +120,9 @@ const Operation = (props) => {
       {!showForm && !props.taskFinished && !showDelForm &&
         <div>
           {!operation.finished &&
-            <button className="btn btn-success btn-sm" onClick={() => setShowForm(true)}>
+            <button className={buttonClass("success")} onClick={() => setShowForm(true)}>
               Add time
-              <FontAwesomeIcon icon={faClock} size="lg" className="mx-1"/>
+              <FontAwesomeIcon icon={faClock} size="lg" className="ms-2"/>
             </button>
           }
           {operation.finished
@@ -140,7 +138,7 @@ const Operation = (props) => {
             </button>
           }
 
-          <button className="btn btn-outline-danger btn-sm" onClick={() => setShowDelForm(true)}>
+          <button className={buttonClass("outline-danger")} onClick={() => setShowDelForm(true)}>
             <FontAwesomeIcon icon={faTrash} size="lg" className="mx-1"/>
           </button>
         </div>
@@ -148,9 +146,9 @@ const Operation = (props) => {
 
       {showDelForm && !showForm && !props.taskFinished &&
         <div>
-          <button className="btn btn-danger btn-sm me-2" onClick={() => setShowDelForm(false)}>NO</button>
+          <button className={buttonClass("danger")} onClick={() => setShowDelForm(false)}>NO</button>
           <span className="mx-2">Confirm deleting operation</span>
-          <button className="btn btn-success btn-sm me-2" onClick={deleteOperation}>YES</button>
+          <button className={buttonClass("success")} onClick={deleteOperation}>YES</button>
         </div>
       }
 

@@ -3,7 +3,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faArchive, faBoxOpen, faMinusCircle, faPlusCircle, faTrash} from "@fortawesome/free-solid-svg-icons"
 import {handleAxiosErrors} from "../../../api/axios"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
-
+import useButtonClass from "../../../hooks/useButtonClass"
 import CardBody from "./ToDoPartials/CardBody"
 import AlertElement from "../../Partials/AlertElement"
 import Operations from "./Operations"
@@ -15,8 +15,8 @@ const Task = (props) => {
   const [showForm, setShowForm] = useState(false)
   const [showDelForm, setShowDelForm] = useState(false)
   const [errMsg, setErrMsg] = useState("")
-
   const axiosPrivate = useAxiosPrivate()
+  const buttonClass = useButtonClass()
 
   useEffect(() => {
     getOperations()
@@ -64,16 +64,14 @@ const Task = (props) => {
     }
   }
 
-  const buttonClass = (type) => `btn btn-sm btn-${type} shadow mx-1`
-
   return (
     <CardBody>
       <div className="card-header d-flex justify-content-between align-items-center">
         <div>
-          <h5 className="text-white" style={{textDecoration: task.finished ? "line-through" : "none"}}>{task.title}</h5>
+          <h5 className={task.finished ? "text-white-50" : "text-white"}
+              style={{textDecoration: task.finished ? "line-through" : "none"}}>{task.title}</h5>
           <h6 className="card-subtitle text-white-50">{task.description}</h6>
         </div>
-
 
         {showDelForm
           ? <div>
@@ -114,8 +112,8 @@ const Task = (props) => {
       </div>
 
       <Operations taskId={task.id} showForm={showForm} setShowForm={setShowForm} setOperations={setOperations}>
-          {operations && operations.map(item => <Operation
-            key={item.id} operation={item} taskFinished={task.finished} setOperations={setOperations}/>)}
+        {operations && operations.map(item => <Operation
+          key={item.id} operation={item} taskFinished={task.finished} setOperations={setOperations}/>)}
       </Operations>
 
       <AlertElement showAlert={errMsg.length > 0} text={errMsg} setText={setErrMsg}/>

@@ -121,6 +121,11 @@ body::-webkit-scrollbar {
     transition: all 0.25s ease-in-out;
 }
 
+.color-tpb {
+    color: #21302b;
+}
+
+
 
 /*background*/
 .firefly {

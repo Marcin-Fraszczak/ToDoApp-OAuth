@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from "react"
 import {handleAxiosErrors} from "../../../api/axios"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 import useTextValidator from "../../../hooks/useTextValidator"
-
 import TitleInput from "./ToDoPartials/TitleInput"
 import AlertElement from "../../Partials/AlertElement"
 
@@ -14,7 +13,7 @@ const Operations = (props) => {
   const axiosPrivate = useAxiosPrivate()
   const textValidator = useTextValidator()
 
-  const handleEsc = (e) => {
+  const handleEsc = e => {
     if (e.key === 'Escape' && document.activeElement === titleRef.current) {
       resetForm()
       props.setShowForm(false)
@@ -23,6 +22,7 @@ const Operations = (props) => {
 
   useEffect(() => {
     window.addEventListener('keydown', handleEsc)
+
     return () => window.removeEventListener('keydown', handleEsc)
   }, [])
 

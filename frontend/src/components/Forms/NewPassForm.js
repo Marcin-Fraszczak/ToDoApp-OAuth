@@ -2,11 +2,10 @@ import React, {useState, useEffect, useRef} from "react"
 import isStrongPassword from "validator/es/lib/isStrongPassword"
 import {axiosJson, handleAxiosErrors} from "../../api/axios"
 import {useLocation, useNavigate} from "react-router-dom"
-import useAuth from "../../hooks/useAuth"
-import FormBody from "./AuthFormPartials/FormBody"
-import PasswordInput from "./AuthFormPartials/PaswordInput"
+import useWideButtonClass from "../../hooks/useWideButtonClass"
+import FormBody from "./FormsPartials/FormBody"
+import PasswordInput from "./FormsPartials/PaswordInput"
 import AlertElement from "../Partials/AlertElement"
-
 
 const NewPassForm = () => {
   const [token, setToken] = useState("")
@@ -16,6 +15,7 @@ const NewPassForm = () => {
   const passwordRef = useRef()
   const navigate = useNavigate()
   const location = useLocation()
+  const wideButtonClass = useWideButtonClass()
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search)
@@ -25,7 +25,6 @@ const NewPassForm = () => {
       passwordRef.current.focus()
     } else setErrMsg("Invalid verification token")
   }, [])
-
 
   useEffect(() => {
     setIsValidPassword((isStrongPassword(password)))
@@ -49,15 +48,15 @@ const NewPassForm = () => {
       const response = await axiosJson.put(`/users/password_reset?token=${token}`, JSON.stringify(password))
       if (response.status === 200) {
         resetForm()
-        navigate("/auth", {replace: true,
-          state: {"infoMsg": "Successfully changed password.$# Please log in with new credentials."}})
+        navigate("/auth", {
+          replace: true,
+          state: {"infoMsg": "Successfully changed password.$# Please log in with new credentials."}
+        })
       } else setErrMsg("Error while changing password")
     } catch (err) {
       handleAxiosErrors(err, setErrMsg)
     }
   }
-
-  const wideButtonClass = (type) => `btn btn-${type} btn-lg w-100 shadow mt-1`
 
   return (
     <>
