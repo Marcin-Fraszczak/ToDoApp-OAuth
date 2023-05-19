@@ -18,6 +18,9 @@ const Operation = (props) => {
   const axiosPrivate = useAxiosPrivate()
   const timeRef = useRef()
   const buttonClass = useButtonClass()
+  const maxTimeValue = 21600
+  const maxTimeMsg = `Too big of a number, maximum allowed total value is
+   ${maxTimeValue} minutes - around ${Math.round(maxTimeValue / 1440)} days.`
 
   const handleEsc = e => {
     if (e.key === 'Escape' && document.activeElement === timeRef.current) {
@@ -66,7 +69,10 @@ const Operation = (props) => {
     if (time) {
       if (isValidTime) {
         if (parseInt(time)) {
-          modifyOperation({time: Math.max(operation.time + parseInt(time), 0)})
+          const addedTime = parseInt(time)
+          if (addedTime + operation.time <= maxTimeValue) {
+            modifyOperation({time: Math.max(operation.time + parseInt(time), 0)})
+          } else setErrMsg(maxTimeMsg)
         }
       } else setErrMsg("Invalid time format")
     }
@@ -113,7 +119,8 @@ const Operation = (props) => {
             time={time}
             setTime={setTime}
             propsRef={timeRef}
-            isValidTime={isValidTime}/>
+            isValidTime={isValidTime}
+            max={maxTimeValue}/>
         </form>
       }
 

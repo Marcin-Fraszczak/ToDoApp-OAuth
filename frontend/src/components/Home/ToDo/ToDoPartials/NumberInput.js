@@ -15,6 +15,7 @@ const NumberInput = (props) => {
           placeholder="Time..."
           ref={props?.propsRef}
           style={{backgroundColor: "#D1E2DB"}}
+          max={props.max}
         />
 
         <button className="btn btn-success" type="submit">
