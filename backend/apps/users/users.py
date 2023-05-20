@@ -1,5 +1,6 @@
 from os import getenv
 from typing import Annotated
+
 from email_validator import validate_email
 from fastapi import Depends, APIRouter, Response, Request, BackgroundTasks, Body
 from fastapi.security import OAuth2PasswordRequestForm
