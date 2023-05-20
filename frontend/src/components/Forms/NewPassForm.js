@@ -24,7 +24,7 @@ const NewPassForm = () => {
       setToken(tokenString)
       passwordRef.current.focus()
     } else setErrMsg("Invalid verification token")
-  }, [])
+  }, [location.search])
 
   useEffect(() => {
     setIsValidPassword((isStrongPassword(password)))

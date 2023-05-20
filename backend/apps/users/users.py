@@ -23,7 +23,7 @@ users = APIRouter(
 
 @users.post("/")
 async def register_user(*, user: User, background_tasks: BackgroundTasks):
-	user.username = validate_email(user.username, check_deliverability=False)
+	user.username = validate_email(user.username, check_deliverability=False).normalized
 	new_user = await uf.add_user_to_db(users_db, user)
 	await send_in_background(background_tasks, Email(email=[user.username, ]), email_type="verification")
 	return new_user

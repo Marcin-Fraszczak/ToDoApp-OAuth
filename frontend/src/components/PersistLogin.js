@@ -25,6 +25,7 @@ const PersistLogin = () => {
     !auth?.accessToken && persist ? verifyRefreshToken() : setIsLoading(false)
 
     return () => isMounted = false
+    // eslint-disable-next-line
   }, [])
 
   return (

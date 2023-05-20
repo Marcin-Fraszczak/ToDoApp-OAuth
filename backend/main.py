@@ -19,6 +19,8 @@ app.include_router(todos)
 origins = [
 	"http://localhost:3000",
 	"http://127.0.0.1:3000",
+	"http://localhost",
+	"http://127.0.0.1",
 ]
 
 app.add_middleware(
@@ -30,5 +32,6 @@ app.add_middleware(
 )
 
 if __name__ == "__main__":
-	load_dotenv('.env')
+	load_dotenv('../.env')
 	uvicorn.run("main:app", port=8000, reload=True)
+	# uvicorn.run("main:app")

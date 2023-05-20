@@ -15,6 +15,7 @@ const AlertElement = (props) => {
       clearTimeout(timeoutId)
       window.removeEventListener('keydown', handleEsc)
     }
+    // eslint-disable-next-line
   }, [])
 
   useEffect(() => {

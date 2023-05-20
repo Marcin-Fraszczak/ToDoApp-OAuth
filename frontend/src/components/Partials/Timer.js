@@ -4,13 +4,14 @@ import useDecodeToken from "../../hooks/useDecodeToken"
 import RefreshIcon from "./RefreshIcon"
 
 const Timer = () => {
-  const [time, setTime] = useState(0)
+  const [time, setTime] = useState("     ")
   const {auth} = useAuth()
   const decodeToken = useDecodeToken()
 
   useEffect(() => {
     const timeoutId = setTimeout(calculateTime, 1000)
     return () => clearTimeout(timeoutId)
+    // eslint-disable-next-line
   }, [time])
 
   const calculateTime = () => {
