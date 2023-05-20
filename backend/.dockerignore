@@ -1,6 +1,7 @@
 .venv
 venv
-
+.dockerignore
+Dockerfile
 __pycache__
 *.pyc
 *.pyo
