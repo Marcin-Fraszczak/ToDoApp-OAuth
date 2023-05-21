@@ -1,0 +1,12 @@
+services:
+  backend:
+    env_file: .env
+    build: ./backend/
+    ports:
+      - "8000:8000"
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"

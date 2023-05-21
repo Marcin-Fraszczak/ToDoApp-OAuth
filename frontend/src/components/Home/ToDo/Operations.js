@@ -24,10 +24,12 @@ const Operations = (props) => {
     window.addEventListener('keydown', handleEsc)
 
     return () => window.removeEventListener('keydown', handleEsc)
+    // eslint-disable-next-line
   }, [])
 
   useEffect(() => {
     setIsValidTitle(textValidator(title, 3))
+    // eslint-disable-next-line
   }, [title])
 
   useEffect(() => {

@@ -20,6 +20,7 @@ const Task = (props) => {
 
   useEffect(() => {
     getOperations()
+    // eslint-disable-next-line
   }, [])
 
   useEffect(() => {

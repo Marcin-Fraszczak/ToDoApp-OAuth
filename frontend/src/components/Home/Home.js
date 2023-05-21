@@ -17,21 +17,20 @@ const Home = () => {
   const location = useLocation()
 
   useEffect(() => {
+    const getTasks = async () => {
+      try {
+        const response = await axiosPrivate("/api/todos")
+        if (response.status === 200) setTasks(response.data)
+        else setErrMsg("Error while downloading tasks")
+      } catch (err) {
+        handleAxiosErrors(err, setErrMsg)
+      }
+    }
     getTasks()
     location?.state?.infoMsg && setInfoMsg(location?.state?.infoMsg)
     window.history.replaceState({}, document.title)
-  }, [])
-
-  const getTasks = async () => {
-    try {
-      const response = await axiosPrivate("/api/todos")
-      if (response.status === 200) {
-        setTasks(response.data)
-      } else setErrMsg("Error while downloading tasks")
-    } catch (err) {
-      handleAxiosErrors(err, setErrMsg)
-    }
-  }
+    // eslint-disable-next-line
+  }, [location?.state?.infoMsg])
 
   return (
     <section className='vh-100'>

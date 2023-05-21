@@ -17,18 +17,18 @@ const DeleteForm = () => {
   const usernameRef = useRef()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
-  const handleEsc = useHandleEsc(-1)
+  const handleEsc = useHandleEsc("/")
 
   useEffect(() => {
     usernameRef.current.focus()
     window.addEventListener('keydown', handleEsc)
 
     return () => window.removeEventListener('keydown', handleEsc)
-  }, [])
+  }, [handleEsc])
 
   useEffect(() => {
     setIsValidUsername(username === auth.username)
-  }, [username])
+  }, [username, auth.username])
 
   const handleSubmit = (e) => {
     e.preventDefault()

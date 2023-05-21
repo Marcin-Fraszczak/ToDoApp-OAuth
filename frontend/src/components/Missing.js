@@ -21,7 +21,8 @@ const Missing = () => {
       clearTimeout(timeoutId)
       window.removeEventListener('keydown', handleEsc)
     }
-  }, [])
+    // eslint-disable-next-line
+  }, [location?.state?.infoMsg])
 
   return (
     <>

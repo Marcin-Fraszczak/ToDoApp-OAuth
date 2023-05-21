@@ -38,22 +38,15 @@ const AuthForm = () => {
     usernameRef.current.focus()
     location?.state?.infoMsg && setInfoMsg(location?.state?.infoMsg)
     window.history.replaceState({}, document.title)
-  }, [])
-
+  }, [location?.state?.infoMsg])
 
   useEffect(() => {
     setIsValidUsername(isEmail(username))
-    errMsg && setErrMsg("")
   }, [username])
 
   useEffect(() => {
     setIsValidPassword((isStrongPassword(password)))
-    errMsg && setErrMsg("")
   }, [password])
-
-  useEffect(() => {
-    setErrMsg("")
-  }, [formType])
 
   useEffect(() => {
     localStorage.setItem("persist", persist)

@@ -8,7 +8,7 @@ from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 from .models import Email
 from .helpers import create_token
 
-load_dotenv('.env')
+load_dotenv('../.env')
 
 conf = ConnectionConfig(
 	MAIL_USERNAME=getenv("MAIL_USERNAME"),

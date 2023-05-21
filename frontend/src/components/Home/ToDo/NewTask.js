@@ -31,10 +31,12 @@ const NewTask = (props) => {
     window.addEventListener('keydown', handleEsc)
 
     return () => window.removeEventListener('keydown', handleEsc)
-  }, [])
+    // eslint-disable-next-line
+  }, [props.showForm])
 
   useEffect(() => {
     setIsValidTitle(textValidator(title, 3))
+    // eslint-disable-next-line
   }, [title])
 
   useEffect(() => {
