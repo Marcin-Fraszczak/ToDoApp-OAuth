@@ -37,7 +37,7 @@ type_config = {
 	}
 }
 
-base_url = f'getenv("LOCAL_HOST", "http://127.0.0.1:3000")/reset?token='
+base_url = f'{getenv("LOCAL_HOST", "http://127.0.0.1:3000")}/reset?token='
 
 async def send_in_background(
 		background_tasks: BackgroundTasks, email: Email, email_type: str = "verification") -> JSONResponse:
