@@ -21,7 +21,7 @@ origins = [
 	"http://127.0.0.1:3000",
 	"http://localhost",
 	"http://127.0.0.1",
-	"https://todoapp-production-c381.up.railway.app/",
+	"https://todoapp-production-c381.up.railway.app",
 ]
 
 app.add_middleware(
