@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// const BASE_URL = 'http://127.0.0.1:8000'
-const BASE_URL = 'https://todoapp-oauth-production.up.railway.app'
+const BASE_URL = 'http://127.0.0.1:8000'
+// const BASE_URL = 'https://todoapp-oauth-production.up.railway.app'
 
 export default axios.create({
   baseURL: BASE_URL
