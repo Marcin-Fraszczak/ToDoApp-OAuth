@@ -27,18 +27,17 @@ conf = ConnectionConfig(
 type_config = {
 	"verification": {
 		"expires": 3600,
-		"url": "http://127.0.0.1:3000/verify?token=",
 		"subject": "ToDoApp Account Verification",
 		"template": "verification_email.html",
 	},
 	"reset": {
 		"expires": 120,
-		"url": "http://127.0.0.1:3000/reset?token=",
 		"subject": "ToDoApp Password Reset",
 		"template": "reset_password_email.html",
 	}
 }
 
+base_url = f'getenv("LOCAL_HOST", "http://127.0.0.1:3000")/reset?token='
 
 async def send_in_background(
 		background_tasks: BackgroundTasks, email: Email, email_type: str = "verification") -> JSONResponse:
@@ -47,8 +46,7 @@ async def send_in_background(
 
 	config = type_config.get(email_type)
 	expires_seconds = config['expires']
-	# TODO: make it a dynamic url
-	url = config['url'] + create_token(recipient, expires_seconds)
+	url = base_url + create_token(recipient, expires_seconds)
 	exp = (datetime.utcnow() + timedelta(seconds=expires_seconds)).strftime("%Y/%m/%d  %H:%M:%S")
 
 	message = MessageSchema(
