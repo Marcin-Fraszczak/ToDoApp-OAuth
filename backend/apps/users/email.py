@@ -28,7 +28,7 @@ base_url = getenv("LOCAL_HOST")
 type_config = {
 	"verification": {
 		"expires": 3600,
-		"url": base_url + "/verification?token=",
+		"url": base_url + "/verify?token=",
 		"subject": "ToDoApp Account Verification",
 		"template": "verification_email.html",
 	},
