@@ -1,6 +1,8 @@
 import uvicorn
+from os import getenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from dotenv import load_dotenv
 import docs
 from apps.users.users import users
@@ -17,10 +19,10 @@ app.include_router(users)
 app.include_router(todos)
 
 origins = [
-	# "http://localhost:3000",
-	# "http://127.0.0.1:3000",
-	# "http://localhost",
-	# "http://127.0.0.1",
+	"http://localhost:3000",
+	"http://127.0.0.1:3000",
+	"http://localhost",
+	"http://127.0.0.1",
 	"https://todoapp-production-c381.up.railway.app",
 ]
 
@@ -31,6 +33,9 @@ app.add_middleware(
 	allow_methods=["*"],
 	allow_headers=["*"],
 )
+
+SECRET_KEY = getenv("SECRET_KEY")
+app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 
 if __name__ == "__main__":
 	load_dotenv('../.env')

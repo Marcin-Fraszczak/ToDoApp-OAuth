@@ -15,7 +15,7 @@ import VerifyForm from "./components/Forms/VerifyForm"
 import NewPassForm from "./components/Forms/NewPassForm"
 import VipZone from "./components/Vip/VipZone"
 import DeleteForm from "./components/Forms/DeleteForm"
-
+import Google from "./components/Google"
 const App = () => {
 
   return (
@@ -29,6 +29,7 @@ const App = () => {
         <Route path="reset_password" element={<ResetPassForm/>}/>
         <Route path="chill" element={<ChillOut/>}/>
         <Route path="spin" element={<Spinner/>}/>
+        <Route path="google" element={<Google/>}/>
 
         {/* protected routes */}
         <Route element={<PersistLogin/>}>

@@ -5,12 +5,14 @@ from email_validator import validate_email
 from fastapi import Depends, APIRouter, Response, Request, BackgroundTasks, Body
 from fastapi.security import OAuth2PasswordRequestForm
 from pymongo.errors import OperationFailure, ServerSelectionTimeoutError
+from authlib.integrations.starlette_client import OAuthError
 
 from . import helpers as uf
 from .models import User, Token, UserInDB, Email, BaseUser
 from ..common.db import users_db
 from ..common import HTTP_exceptions as exc
 from .email import send_in_background
+from .auth_google import oauth
 
 ACCESS_TOKEN_EXPIRES = getenv("ACCESS_TOKEN_LIFETIME_SECONDS", 30)
 REFRESH_TOKEN_EXPIRES = getenv("REFRESH_TOKEN_LIFETIME_SECONDS", 3600)
@@ -141,3 +143,21 @@ async def delete_user(*, user: Annotated[UserInDB, Depends(uf.get_current_user)]
 	users_db.delete_one({"username": user.username})
 	response.delete_cookie("refresh_token")
 	return {"username": user.username}
+
+
+@users.get("/auth/google")
+async def login_via_google(request: Request):
+	redirect_uri = "http://127.0.0.1:3000/google"
+	# redirect_uri = "http://127.0.0.1:8000/users/auth/google/verify"
+	return await oauth.google.authorize_redirect(request, redirect_uri)
+
+
+@users.get("/auth/google/verify")
+async def verify_via_google(request: Request):
+	try:
+		access_token = await oauth.google.authorize_access_token(request)
+	except OAuthError:
+		raise exc.invalid_credentials
+	user_data = await oauth.google.parse_id_token(request, access_token)
+	print(user_data)
+	return {"user": "not yet"}

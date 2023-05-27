@@ -139,9 +139,9 @@ const AuthForm = () => {
       <Divider centerText="OR CONTINUE WITH:"/>
 
       <div>
-        <ThirdPartyButton icon={faGoogle}/>
-        <ThirdPartyButton icon={faFacebookSquare}/>
-        <ThirdPartyButton icon={faGithub}/>
+        <ThirdPartyButton icon={faGoogle} provider="google" setErrMsg={setErrMsg}/>
+        <ThirdPartyButton icon={faFacebookSquare} provider="facebook" setErrMsg={setErrMsg}/>
+        <ThirdPartyButton icon={faGithub} provider="github" setErrMsg={setErrMsg}/>
       </div>
       <span className="color-tpb">(3rd party authentication is still in development...)</span>
 
