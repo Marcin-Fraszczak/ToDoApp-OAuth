@@ -15,7 +15,7 @@ https://todoapp-oauth-production.up.railway.app/docs
 to run it locally:
 
 1) Create a folder, then inside this folder:
-``git clone git@github.com:Marcin-Fraszczak/ToDoApp-OAuth.git .``
+``git clone https://github.com/Marcin-Fraszczak/ToDoApp-OAuth.git .``
 2) Inside the root directory, create .env file according to instructions in the .env_sample file.
 3) Inside the root directory, where docker-compose.yaml is:
 ``docker compose up``
